@@ -1,0 +1,82 @@
+.livestream {
+    position: relative;
+    top: -1rem;
+    left: -1rem;
+}
+
+.myliveslist {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    color: #ffffff;
+    width: 100%;
+    height: 100%;
+}
+
+.livebox {
+    position: relative;
+    top: -1rem;
+    left: 0.2rem;
+    width: 24rem;
+    height: 15rem;
+    margin: 1%;
+    background-color: #161616;
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+.livebox:hover {
+    border: 1px solid red !important;
+
+}
+
+.livetitlees {
+    margin-left: 1rem;
+    color: gray;
+    font-size: 2rem;
+
+}
+
+.created-at-livees {
+    margin-left: 1rem;
+    color: gray;
+    font-size: 1rem;
+
+}
+
+.youtubelinkes {
+    text-decoration: none;
+
+}
+
+.btnFin {
+    position: relative;
+    left: 17rem;
+    top: -2.4rem;
+    font-size: 1rem;
+    color: white;
+    background-color: red;
+    border-radius: 20px;
+    width: 6rem;
+    padding: 2%;
+    cursor: pointer;
+    border: none;
+}
+
+.btnFin:hover {
+    padding: 2.5%;
+    width: 6.5rem;
+}
+.btnFinDisabled {
+    position: relative;
+    left: 17rem;
+    top: -2.4rem;
+    font-size: 1rem;
+    color: gray;
+    background-color: #161616;
+    border-radius: 20px;
+    width: 6rem;
+    padding: 2%;
+    cursor: not-allowed;
+    border: none;
+}

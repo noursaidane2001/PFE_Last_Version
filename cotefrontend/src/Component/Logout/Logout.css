@@ -1,0 +1,12 @@
+.logou-btn{
+    border-radius: 20px !important;
+    color: white !important;
+    background-color: #343beb !important;
+    margin-right: 2rem !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+}
+.logou-btn:hover {
+    background-color: #161616 !important;
+    color: #343beb !important;
+  }

@@ -1,0 +1,106 @@
+.boutton {
+    background-color: #161616 !important;
+    height: 100% !important;
+    width: 100% !important;
+    min-height: calc(235px + (100px * (5 - 1)));
+    margin-top: 12vh;
+
+}
+.back{
+  /* background-color: #161616 !important;
+  height:fit-content !important;
+  width: 100% !important;
+  min-height:calc(235px + (100px * (5 - 1))); */
+  background-color: #161616 !important;
+  height: 650px;
+  width: 100% !important;
+
+  margin-top: 60px;
+}
+/*.back {
+  background-color: #161616 !important;
+  height: 500px; /* Set a fixed height value
+  width: 100% !important;
+  margin-top: 12vh;
+    min-height: calc(705px + (80px * (5 - 1)));
+}
+*/
+/*
+.boutton {
+    background-color: #161616 !important;
+    height: 100vh !important;
+    width: 100% !important;
+    min-height: calc(235px + (100px * (5 - 1)));
+    margin-top: 190vh;
+
+} */
+.tab {
+  background-color: black;
+  color: white !important;
+  font-family: 'PT Sans', sans-serif;
+}
+
+.barLeft{
+    background-color: #222222 !important;
+    color: white !important;
+    margin-top: 30px !important;
+    margin-bottom: 30px !important;
+    margin-right: 8px !important;
+    margin-left: -150px !important;
+    border-radius: 8px !important;
+    width: fit-content;
+
+}
+.css-1aaesij-MuiPaper-root {
+  background-color: #fff;
+  color: rgba(0, 0, 0, 0.87);
+  -webkit-transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  border-radius: 4px;
+  box-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12);
+  background-color: #222222;
+  width: fit-content;
+}
+.barRight{
+    background-color: #222222 !important;
+    color: white !important;
+    margin-top: 30px !important;
+    margin-bottom: 30px !important;
+    margin-left: 8px !important;
+    margin-right: 60px ! important;
+    border-radius: 8px !important;
+    max-width:150 !important;
+    max-height: max-content !important;
+}
+.button {
+    color: #FFFFFF !important;
+    width: 100% !important;
+    height: 60px !important;
+    justify-content: flex-start !important;
+    font-size: 1rem !important;
+    align-items: center !important;
+    text-transform: capitalize !important;
+    border-radius: 0% !important;
+    max-width: 100% !important;
+  }
+  .button:active {
+    border-left: 5px solid #434ebe !important;
+}
+  @media (max-width: 768px) {
+    .button {
+      font-size: 1.2rem !important;
+    }
+  }
+  @media (max-width: 480px) {
+    .button {
+      font-size: 1rem !important;
+    }
+  }
+  h1 {
+    font-size: 40px; /* change the value to the desired font size */
+    color: white !important;
+    font-family: 'PT Sans', sans-serif;
+  }
+  .MuiButton-label{
+    margin-left: 10px;
+  }

@@ -1,0 +1,82 @@
+.g1 {
+  margin-top: 10vh;
+  background-color: #161616 !important;
+  height: auto !important;
+  width: 100% !important;
+  min-height: calc(235px + (100px * (20 - 1)));
+  margin-top: 10vh;
+}
+
+
+.row {
+  margin-top: 2rem;
+  margin-left: 5rem;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.card {
+  background-color: #222;
+  color: #343beb;
+  width: 19rem;
+  height: 22rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease-in-out;
+  border-radius: 5px;
+  overflow: hidden;
+  margin-bottom: 3rem;
+  margin-right: 3rem;
+}
+
+.card-img-top {
+  width: 19rem;
+  height: 17rem;
+  object-fit: cover;
+}
+.card:hover {
+  transform: scale(1.05);
+  width: 18rem;
+  height: auto;
+}
+
+.card.enlarge {
+  position: absolute;
+  z-index: 100;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(1.5);
+  transition: transform 0.3s ease-in-out;
+  
+}
+
+.card:hover .card-img-top {
+  width: 18rem !important;
+  height: 17rem;
+}
+
+.card.enlarge .card-body {
+  opacity: 0;
+  
+}
+
+
+.card-body {
+  margin-top:-3rem;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+.card-title {
+  font-size: 150%;
+  font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  
+}
+.card-rules{
+  margin-top:0rem;
+  font-size: 1.2rem;
+  font-weight: normal;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; 
+
+}
+
+

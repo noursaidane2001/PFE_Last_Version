@@ -1,0 +1,12 @@
+const express = require('express');
+const http = require('http');
+const cors = require('cors');
+const mongoose = require('mongoose');
+const Chat = require('../models/chat');
+const Tournament = require('../models/tournament');
+const User = require('../models/user');
+const chatController = require('../controllers/chatController');
+const router = express.Router();
+router.get('/livechat/:id', chatController.chat_getLive);
+router.get('/tournamentchat/:id', chatController.chat_getTournamnent);
+module.exports = router;

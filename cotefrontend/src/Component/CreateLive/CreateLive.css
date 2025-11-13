@@ -1,0 +1,44 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100vw;
+    min-height: 100vh;
+    background-color: #161616;
+    margin-top: 10vh;
+  }
+  
+  .title0 {
+    margin: 0;
+    color: #FFFFFF;
+    font-family: "Mulish", sans-serif;
+    font-weight: 200;
+    font-size: 60px;
+    margin-bottom: 10px;
+    letter-spacing: 2px;
+  }
+  
+  .formControl0 {
+    margin: 10px;
+    width: 52ch;
+  }
+  
+  .inputLabel {
+    color: rgb(159, 156, 156);
+  }
+  .inputField {
+    color: #ffffff;
+  }
+  .alert {
+    width: 100%;
+    margin-top: 10px;
+  }
+  .button {
+    background-color: #343beb;
+    border-radius: 50px;
+    letter-spacing: 3px;
+    margin-bottom: 1vh;
+    margin-top: 10px;
+    width: 200px;
+  }
+  

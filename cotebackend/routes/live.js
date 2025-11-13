@@ -1,0 +1,15 @@
+const Live = require('../models/live');
+const express = require('express');
+const router = express.Router();
+const mongoose = require('mongoose');
+const liveController = require('../controllers/liveController');
+const { livestream } = require('../middleware/livestream');
+router.get('/all-live', liveController.live_get);
+router.get('/livenow', liveController.live_getnow);
+router.get('/livepassed', liveController.live_getpassed);
+router.get('/:id', liveController.livebyid_get);
+router.get('/createdlives/:id', liveController.livecreated_get);
+router.post('/createlive', liveController.live_post);
+router.delete('/:id', liveController.live_delete);
+router.put('/finishlive/:id', liveController.live_update);
+module.exports = router;

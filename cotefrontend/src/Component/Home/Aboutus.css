@@ -1,0 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=PT+Sans&display=swap');
+.AppAbout{
+  padding-top: 50px;
+  padding-right: 30px;
+  padding-bottom: 50px;
+  padding-left: 30px;
+  height: 80vh;
+  background-color: #101010;
+}
+.App-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 20px;
+    text-align: left;
+    text-indent: 20px;
+}
+p{
+    text-indent: 20px;
+    text-align: right;
+    font-family: 'PT Sans', sans-serif;
+    font-size: 20px;
+    color : #FFFBF5;
+    background-size: cover;
+    flex: 1;
+  }
+h1{
+    font-family: 'PT Sans', sans-serif;
+    padding: 0px;
+}
+.image{
+  width: 40%;
+  height: auto;
+  float: left;
+}
+.about {
+    display: flex;
+    align-items: center;
+  }
+  .aboutus{
+    font-family: 'PT Sans', sans-serif;
+    font-size: 20px;
+    text-align: justify;
+    margin-left: 40px;
+  }
+  .vertical-line {
+    border-left: 2px solid #343BEB;
+    height: 100%;
+    margin: 0 20px;
+  }

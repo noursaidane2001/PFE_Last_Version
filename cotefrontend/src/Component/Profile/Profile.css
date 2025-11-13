@@ -1,0 +1,53 @@
+.profile {
+  margin-top: 10vh;
+  background-color: #161616 !important;
+  height: auto !important;
+  width: 100% !important;
+  min-height: 95vh;
+
+}
+
+.barLeft0 {
+  background-color: #222222 !important;
+  height: auto !important;
+  color: white !important;
+  margin-top: 30px !important;
+  margin-bottom: 30px !important;
+  margin-right: 5px !important;
+  border-radius: 8px !important;
+}
+
+.meee {
+  position: relative;
+  top: -1rem;
+  left: -1rem;
+}
+
+.barRight0 {
+  background-color: #222222 !important;
+  height: auto !important;
+  color: white !important;
+  margin-top: 30px !important;
+  margin-bottom: 30px !important;
+  margin-left: 5px !important;
+  border-radius: 8px !important;
+
+}
+
+.button {
+  color: #FFFFFF !important;
+  width: 100% !important;
+  height: 70px !important;
+  justify-content: flex-start !important;
+  font-size: 1.8rem !important;
+  align-items: flex-end !important;
+  text-transform: capitalize !important;
+  border-radius: 0% !important;
+  max-width: 100% !important;
+
+}
+
+.button.active {
+  border-left: 3px solid #343beb;
+  /* Remplacez la couleur #FF0000 par la couleur de votre choix */
+}

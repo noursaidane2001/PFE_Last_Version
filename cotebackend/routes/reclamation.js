@@ -1,0 +1,13 @@
+const Reclamation = require('../models/reclamation');
+const express = require('express');
+const router = express.Router();
+const mongoose = require('mongoose');
+const reclamationController=require('../controllers/reclamationController');
+router.post('/createreclamationTournament/:id',reclamationController.reclamationTour_create);
+router.post('/createreclamationLive/:id',reclamationController.reclamationLive_create);
+router.get('/reclamationTournament',reclamationController.reclamationTournament_get);
+router.get('/reclamationLive',reclamationController.reclamationLive_get);
+router.get('/:id',reclamationController.reclamation_byid);
+router.put('/treatreclamation/:id',reclamationController.treatreclamation);
+// router.put('/:id',reclamationController.reclamation_deletebyid);
+module.exports= router;

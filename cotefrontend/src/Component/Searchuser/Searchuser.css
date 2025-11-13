@@ -1,0 +1,83 @@
+.profiles {
+    margin-top: 10vh;
+    background-color: #161616 !important;
+    height: auto !important;
+    width: 100% !important;
+    min-height: calc(200px + (90px * (6 - 1)));
+    margin-top: 10vh;
+}
+
+.userProfile {
+    margin-top: 2rem;
+    margin-left: 0.3rem;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.cardUser {
+    background-color: #222;
+    width: 30rem;
+    height: 8rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    display: flex;
+    margin-left: 1rem;
+
+}
+
+.cardUser img {
+    position: relative;
+    top: 1rem;
+    left: 1rem;
+    width: 6rem;
+    height: 6rem;
+    object-fit: cover;
+    border-radius: 50%;
+
+}
+.card-info-user{
+    display: flex;
+    flex-direction: column;
+
+}
+.card-info{
+    position: relative;
+    top: 1.5rem;
+    left: 2rem;
+    display: flex;
+    flex-direction: row;
+    color: white;
+    font-size: 4vh;
+
+}
+.card-info-name{
+    margin-right: 2%;
+
+}
+.card-info-lastname{
+    margin-left: 2%;
+
+}
+.card-info-follow{
+    position: relative;
+    top: 3rem;
+    left: 2rem;
+    display: flex;
+    flex-direction: row;
+    color: white;
+    font-size: 2vh;
+}
+.subscribeButton{
+    color:white;
+    background-color: #343beb;
+    position: relative;
+    top: 3rem;
+    left: 4rem;
+    width: 6rem;
+    height: 2rem;
+    cursor: pointer;
+    border-radius: 10px;
+    border-color: #343beb;
+
+
+}

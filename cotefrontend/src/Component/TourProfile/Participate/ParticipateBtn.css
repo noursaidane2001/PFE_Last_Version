@@ -1,0 +1,168 @@
+.PartBtn {
+  display: flex;
+  align-items: center;
+}
+
+@media screen and (max-width:1000px) {
+  .PartBtn {
+    display: flex;
+    align-items: center;
+    margin-left: 1vw;
+
+
+  }
+}
+
+.boutonpart {
+  color: white;
+  width: auto;
+  height: 2rem;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-left: 2vw;
+  margin-right: 0.5vh;
+
+}
+
+@media screen and (max-width:1000px) {
+  .boutonpart {
+    color: white;
+    width: auto;
+    height: 2rem;
+    cursor: pointer;
+    border-radius: 5px;
+    position: relative;
+    margin-left: 7rem;
+    margin-right: 0.5vh;
+  }
+}
+
+/* .report{
+    width: 2.5rem;
+    height: 2rem ;
+    background-color: #222;
+    border-color: #222;
+} */
+.report {
+  width: 2.5rem;
+  height: 2rem;
+  border-radius: 5px;
+  border: 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 1);
+  cursor: pointer;
+  background-color: #222;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  margin-left: 0.3rem;
+}
+
+.report::before {
+  content: 'Report';
+  position: absolute;
+  top: -1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #343beb;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  color: white;
+  border-radius: 0.25rem;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s, visibility 0.3s;
+}
+
+.report:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
+}
+
+.report:hover::before {
+  opacity: 1;
+  visibility: visible;
+}
+
+.Report-dialog-title {
+  color: white;
+  text-align: center;
+  font-size: 2rem !important;
+}
+
+.textc-dialog {
+  margin-left: 2rem !important;
+  margin-bottom: 2rem !important;
+  text-align: center !important;
+  color: gray !important;
+}
+
+.barre-gis {
+  margin-bottom: 1rem ;
+  width: 30rem;
+  text-align: center;
+  border-top: 1px solid rgb(151, 151, 151);
+}
+.report-form{
+  display: flex;
+  flex-direction: column;
+}
+.type-select {
+  position: relative;
+  width: 15rem;
+
+}
+
+.demo-simple-select--label{
+  color:#343beb !important;
+}
+#ii{
+  color:#343beb !important;
+}
+#demo-simple-select-standard{
+  color: white;
+  border-bottom: 1px solid #343beb;
+
+}
+#demo-simple-select-standard:focus{
+  color: white;
+  border-bottom: 1px solid #343beb !important;
+
+}
+/* icon btn */
+.css-pqjvzy-MuiSvgIcon-root-MuiSelect-icon { 
+   color: #343beb !important;
+}
+.css-m5hdmq-MuiInputBase-root-MuiInput-root-MuiSelect-root:after {
+  border-bottom: 2px solid gray !important;
+ 
+}
+.css-6hp17o-MuiList-root-MuiMenu-list {
+  background-color: #161616;
+  color: gray;
+}
+.subbtn{
+  position:relative;
+  left: -25rem;
+  margin-top: 2rem !important;
+  width: 6rem;
+  background-color: #343beb !important;
+  color: white !important;
+}
+.inn{
+  position: relative;
+  top: 1rem;
+
+}
+.inl{
+  color: #343beb !important;
+}
+.ins{
+  color: white !important;
+  border-bottom: 1px solid #343beb !important;
+
+}
+.ins::after{
+  border-bottom: 1px solid #343beb !important;
+
+}

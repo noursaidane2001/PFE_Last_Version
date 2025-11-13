@@ -1,0 +1,148 @@
+.chatClass {
+    max-Height: "300px";
+    overflow-y: scroll;
+    width: 35rem;
+    position: fixed;
+  bottom: 0;
+}
+.chatcontainer {
+    background-color: #222;
+    width: 250rem;
+}
+.inputContainer {
+ 
+    align-items: center;
+    position: absolute;
+    bottom: 0;
+    background-color: #ee1414;
+  }
+
+.messageInput {
+    width: auto;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top: 10px;
+    height: auto;
+
+}
+
+@media (min-width: 768px) {
+    .messageInput {
+        width: 25rem;
+    }
+}
+
+@media (max-width: 767px) {
+    .messageInput {
+        width: 20rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .messageInput {
+        width: 15rem;
+    }
+}
+
+
+.containersender {
+    background-color: "#343beb";
+    color: "white";
+    padding: "10px";
+    margin-Bottom: "10px";
+    border-Radius: "5px";
+}
+
+.containermessage {
+    background-color: "#343beb";
+    color: "white";
+    padding: "10px";
+    margin-Bottom: "10px";
+    border-Radius: "5px";
+}
+
+/* CSS */
+
+.chatContainer {
+    background-color: #222;
+    border-radius: 5px;
+    padding: 22px;
+    max-height: 22rem;
+    width: 22rem;
+    max-height: 250px; /* Set your desired height here */
+    overflow: auto; 
+}
+
+.chatMessage {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 10px;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.messageContent {
+    background-color: #343beb;
+    padding: 5px;
+    bottom: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    align-Items: 'center';
+    margin-Left: '0px';
+    margin-bottom: 10px;
+}
+.Chatbig{
+    background-color: #222;
+}
+.messageText {
+    margin-top: 5px;
+}
+
+.messageTime {
+    font-size: 12px;
+    display: flex;
+    color: #888;
+    justify-content: flex-end;
+    
+}
+
+.messageInput {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+.sendMessageButton {
+    display: block;
+    width: 70%;
+    padding: 5px;
+    background-color: #343beb;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.senderContainer {
+    display: flex;
+    align-items: center;
+}
+
+.avatarContainer {
+    margin-right: 10px;
+}
+
+.messagecss {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}

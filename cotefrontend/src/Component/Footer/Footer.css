@@ -1,0 +1,48 @@
+.foot{
+    background-color: #101010;
+    height: 50vh;
+    margin-top: 0%;
+    border-top: 9px solid #343BEB;
+}
+.fot{
+    font-size: 40px;
+    color: white !important;
+    font-family: 'PT Sans', sans-serif;
+    margin-top: 0;
+    display: flex;
+}
+.logofoot{
+    margin-top: 60px;
+    margin-left: 40px;
+    height: 35vh;
+    width: 16vw;
+}
+.middle{
+    display: flex;
+    margin-left: 110px;
+    margin-top: 130px;
+    margin-bottom: 50px;
+}
+.texte{
+    color:aliceblue !important;
+    font-size: 20px;
+    margin-left: 10px;
+    margin-right: 20px;
+}
+.verticale-line {
+    border-left: 1px solid #343BEB;
+    height: 8vh;
+    margin: 0 10px;
+  }
+  .social{
+    width: 35px;
+    height: 35px;
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+  .fott{
+    display: flex;
+    margin-top: 160px;
+    margin-bottom: 50px;
+    margin-left: 90px;
+  }

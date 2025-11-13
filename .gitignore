@@ -1,0 +1,4 @@
+.env
+*.env
+cotefrontend/src/Component/Datetest
+node_modules/

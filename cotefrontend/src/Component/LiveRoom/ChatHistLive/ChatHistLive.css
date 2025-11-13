@@ -1,0 +1,48 @@
+
+/* CSS */
+
+.chatContainer11 {
+    background-color: #222;
+    border-radius: 5px;
+    padding: 22px;
+    max-height: 22rem;
+    width: 22rem;
+    max-height: 250px; /* Set your desired height here */
+    overflow: auto; 
+}
+.sendingMessage11{
+    color: white;
+}
+
+.messageContent11 {
+    background-color: #343beb;
+    padding: 5px;
+    bottom: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    align-Items: 'center';
+    margin-Left: '0px';
+    margin-bottom: 10px;
+}
+.Chatbig11{
+    background-color: #222;
+}
+
+.messageTime11 {
+    font-size: 12px;
+    display: flex;
+    color: #888;
+    justify-content: flex-end;
+}
+.senderContainer11 {
+    display: flex;
+    align-items: center;
+}
+
+.messagecss11 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+}
