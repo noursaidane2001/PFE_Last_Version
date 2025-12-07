@@ -53,8 +53,8 @@ module.exports.blockuserbyid= async(req, res) => {
          service: "gmail",
          host: "smtp.gmail.com",
          auth: {
-           user:"eastremtesting17@gmail.com",
-           pass: "dnozzgkbvcvgirjr"
+           user:"nourentrepreneur466@gmail.com",
+           pass: "kfzagrujhgaultwn"
          },
        })
        console.log("user is blockeddd sending");
