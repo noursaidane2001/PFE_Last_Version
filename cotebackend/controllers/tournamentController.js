@@ -39,7 +39,7 @@ function handleErrors(err) {
 
 module.exports.tournament_get = async (req, res) => {
   try {
-    tours = await Tournament.find().populate('participantid').populate('idcreator')
+    const tours = await Tournament.find().populate('participantid').populate('idcreator')
     res.status(200).send(tours);
   } catch (err) {
     res.status(400).send(err)
@@ -47,7 +47,7 @@ module.exports.tournament_get = async (req, res) => {
 };
 module.exports.tournamentid_get = async (req, res) => {
   try {
-    tour = await Tournament.findById(req.params.id).populate('participantid').populate('idcreator')
+   const tour = await Tournament.findById(req.params.id).populate('participantid').populate('idcreator')
     res.status(200).send(tour)
   } catch (err) {
     res.status(400).send(err)
