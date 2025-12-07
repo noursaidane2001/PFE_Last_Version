@@ -11,8 +11,7 @@ export const options = {
   ],
   thresholds: {
     http_req_failed: ["rate<0.05"], // Max 5% d'échec
-    http_req_duration: ["p(95)<1000"], // 95% < 1 seconde
-    http_req_duration: ["p(99)<2000"], // 99% < 2 secondes
+    http_req_duration: ["p(95)<1000", "p(99)<2000"], // CORRIGÉ : fusionné en une seule propriété
   },
 };
 
@@ -132,13 +131,11 @@ export function handleSummary(data) {
   }
 
   console.log(
-    `\n🎯 VERDICT: ${
-      failRate < 5 ? "✅ CONFORME" : "❌ NON CONFORME"
+    `\n🎯 VERDICT: ${failRate < 5 ? "✅ CONFORME" : "❌ NON CONFORME"
     } (seuil < 5%)`
   );
   console.log(
-    `           ${
-      checksPass > 95 ? "✅ CONFORME" : "❌ NON CONFORME"
+    `           ${checksPass > 95 ? "✅ CONFORME" : "❌ NON CONFORME"
     } pour checks (seuil > 95%)\n`
   );
 
