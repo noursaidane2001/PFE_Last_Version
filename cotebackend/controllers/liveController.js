@@ -14,7 +14,7 @@ module.exports.live_get = async (req, res) => {
 };
 module.exports.live_getnow = async (req, res) => {
   try {
-    const liveStream = await Live.find({islive: true}).populate("creatorid");
+    const liveStream = await Live.find({ islive: true }).populate("creatorid");
     res.status(200).send(liveStream);
   } catch (err) {
     console.log(err);
@@ -23,7 +23,7 @@ module.exports.live_getnow = async (req, res) => {
 };
 module.exports.live_getpassed = async (req, res) => {
   try {
-    const liveStream = await Live.find({islive: false}).populate("creatorid");
+    const liveStream = await Live.find({ islive: false }).populate("creatorid");
     res.status(200).send(liveStream);
   } catch (err) {
     console.log(err);
@@ -95,15 +95,47 @@ module.exports.livebyid_get = async (req, res) => {
     res.status(400).send(err);
   }
 };
+
 module.exports.live_delete = async (req, res) => {
   try {
-    id = req.params.id;
-    live = await Live.findOneAndDelete({ _id: id });
-    await Reclamation.deleteMany({ idlive: id });
-    res.status(200).send(live)
-  }
-  catch (err) {
-    res.status(400).send(err)
+    // Récupérer et convertir l'ID en chaîne de caractères
+    const id = req.params.id.toString();
+
+    // Validation de l'ID
+    if (!id || typeof id !== 'string' || id.trim() === '') {
+      return res.status(400).send({ error: 'ID invalide' });
+    }
+
+    // Validation pour ObjectId MongoDB
+    if (!ObjectId.isValid(id)) {
+      return res.status(400).send({ error: 'Format ID invalide' });
+    }
+
+    // Convertir en ObjectId
+    const objectId = new ObjectId(id);
+
+    // Supprimer le live
+    const live = await Live.findOneAndDelete({ _id: objectId });
+
+    // Si le live n'existe pas
+    if (!live) {
+      return res.status(404).send({ error: 'Live non trouvé' });
+    }
+
+    // Supprimer les réclamations associées
+    await Reclamation.deleteMany({ idlive: objectId });
+
+    // Réponse
+    res.status(200).send({
+      success: true,
+      message: 'Live et réclamations associées supprimés avec succès',
+      data: { _id: live._id }
+    });
+  } catch (err) {
+    console.error('Erreur dans live_delete:', err);
+    res.status(500).send({
+      error: 'Une erreur est survenue lors de la suppression'
+    });
   }
 };
 module.exports.livecreated_get = async (req, res) => {
