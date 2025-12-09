@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@chakra-ui/icons": "^2.0.17",
+    "@chakra-ui/icons": "^2.2.6",
     "@chakra-ui/react": "^2.5.3",
     "@mui/lab": "^5.0.0-alpha.124",
     "@mui/styles": "^5.11.13",
