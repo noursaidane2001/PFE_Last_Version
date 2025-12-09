@@ -14,6 +14,6 @@
     "react-date-picker": "^9.2.0",
     "react-paginate": "^8.1.4",
     "socket.io-client": "^4.6.1",
-    "sweetalert2": "^11.7.3"
+    "sweetalert2": "^11.26.3"
   }
 }
