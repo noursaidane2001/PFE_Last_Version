@@ -381,7 +381,6 @@
 .creator {
   display: flex;
   flex-direction: row;
-  color: white;
   font-size: 2vh;
   margin-top: 2%;
   color: #343beb;
