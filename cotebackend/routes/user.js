@@ -41,30 +41,44 @@ router.get('/signupconfirm/:id',authController.signupconfirm_get);
  router.get('/followers/:id', userController.followers);
  router.get('/mytournaments/:id', userController.tournaments_participated);
 // Add photo de profile
-const filename = '';
+const { v4: uuidv4 } = require('uuid');
+const path = require('path');
 
 const mystorage = multer.diskStorage({
-  destination: './uploads/user', //'./uploads/user'
+  destination: './uploads/user', // dossier fixe
   filename: (req, file, callback) => {
-    // generate a unique filename based on the current time
-    let date = Date.now();
-    let f1 = date + '.' + file.mimetype.split('/')[1];
-    filename = f1;
-    callback(null, f1);
-  }
+    // Générer un nom de fichier unique et sûr
+    const uniqueName = uuidv4();
+
+    // Extensions autorisées selon MIME type
+    const mimeToExt = {
+      'image/jpeg': 'jpg',
+      'image/png': 'png',
+      'image/gif': 'gif',
+    };
+
+    const ext = mimeToExt[file.mimetype] || 'bin'; // fallback sécurisé
+
+    const safeFilename = `${uniqueName}.${ext}`;
+    callback(null, safeFilename);
+  },
 });
 
-const upload = multer({storage: mystorage});
+const upload = multer({ storage: mystorage });
 
 router.post('/addprofilephoto', upload.single('photo'), async (req, res) => {
   try {
     const id = req.body.id;
-    let filename = req.file ? req.file.filename : 'defaultUser.png'; //  nom de fichier par défaut 
-    const updatedUser = await User.findByIdAndUpdate(id, {photo: filename}, {new: true});
+    const filename = req.file ? req.file.filename : 'defaultUser.png'; // fichier par défaut
+    const updatedUser = await User.findByIdAndUpdate(
+      id,
+      { photo: filename },
+      { new: true }
+    );
     res.status(201).json(updatedUser);
   } catch (err) {
-    console.log(err);
-    res.status(400).json({error: err.message});
+    console.error(err);
+    res.status(400).json({ error: err.message });
   }
 });
 
