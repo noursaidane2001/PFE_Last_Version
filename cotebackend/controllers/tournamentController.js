@@ -41,7 +41,7 @@ module.exports.tournament_get = async (req, res) => {
 };
 module.exports.tournamentid_get = async (req, res) => {
   try {
-   const tour = await Tournament.findById(req.params.id).populate('participantid').populate('idcreator')
+    const tour = await Tournament.findById(req.params.id).populate('participantid').populate('idcreator')
     res.status(200).send(tour)
   } catch (err) {
     res.status(400).send(err)
@@ -58,7 +58,7 @@ module.exports.tournamentid_delete = asyncHandler(async (req, res) => {
     }
     // Delete the tournament
     const tour = await Tournament.findOneAndDelete({ _id: id });
-    
+
     await Reclamation.deleteMany({ idtournament: id });
 
     res.status(200).send(tour);
@@ -92,7 +92,7 @@ module.exports.tournamentid_participate = async (req, res) => {
       const tour = await Tournament.findByIdAndUpdate(
         req.params.id,
         { $addToSet: { participantid: user } },
-       
+
         { new: true }
       ).populate('participantid').populate('idcreator');
       console.log(tour);
@@ -120,7 +120,7 @@ module.exports.tournamentid_unparticipate = async (req, res) => {
       { $pull: { participantid: user } },
       { new: true }
     );
-    
+
     return res.status(200).send({ message: "The user is no longer participating" });
   } catch (err) {
     return res.status(400).send(err);
@@ -164,8 +164,11 @@ module.exports.alltournaments_get = async (req, res) => {
     if (!mongoose.Types.ObjectId.isValid(iduser)) {
       return res.status(400).json({ error: 'Invalid user ID' });
     }
-    const participatingTournaments = await Tournament.find({ participantid: iduser });
-    const createdTournaments = await Tournament.find({ idcreator: iduser });
+
+    const userObjectId = mongoose.Types.ObjectId(iduser);
+
+    const participatingTournaments = await Tournament.find({ participantid: userObjectId });
+    const createdTournaments = await Tournament.find({ idcreator: userObjectId });
 
     const allTournaments = participatingTournaments.concat(createdTournaments);
 
