@@ -145,15 +145,18 @@ module.exports.createdtournaments_get = async (req, res) => {
   try {
     const iduser = req.params.id;
 
-    // Valider que c'est un ObjectId valide
+    // Vérifier que c'est un ObjectId valide
     if (!mongoose.Types.ObjectId.isValid(iduser)) {
       return res.status(400).json({ error: 'Invalid user ID' });
     }
-    const tournaments = await Tournament.find({ idcreator: iduser });
 
-    return res.status(200).send(tournaments);
+    // Utiliser Mongoose de manière sécurisée
+    const tournaments = await Tournament.find({ idcreator: mongoose.Types.ObjectId(iduser) }).exec();
+
+    return res.status(200).json(tournaments);
   } catch (err) {
-    return res.status(400).send(err);
+    console.error(err);
+    return res.status(500).json({ error: 'Server error' });
   }
 };
 module.exports.alltournaments_get = async (req, res) => {
