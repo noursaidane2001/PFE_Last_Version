@@ -8,209 +8,228 @@ const videoExists = require('../middleware/YoutubeApi');
 const { checkUser } = require('../middleware/authMiddleware');
 const { currentUser } = require('../middleware/currentUser');
 const Chat = require('../models/chat');
-//getting all tournaments
+
+// Getting all tournaments
 router.get('/all-tournament', tournamentController.tournament_get);
-//getting tournament by id
+
+// Getting tournament by id
 router.get('/:id', tournamentController.tournamentid_get);
-//delete tournament
+
+// Delete tournament
 router.delete('/:id', tournamentController.tournamentid_delete);
-//delete all tournament
+
+// Delete all tournament
 router.delete('/', tournamentController.tournamentid_deleteall);
-//participation routes
+
+// Participation routes
 router.post('/participate/:id', tournamentController.tournamentid_participate);
 router.post('/unparticipate/:id', tournamentController.tournamentid_unparticipate);
 router.get('/participating/:id', tournamentController.participatingtournaments_get);
 router.get('/createdtournaments/:id', tournamentController.createdtournaments_get);
-router.get('/all-user-tournaments/:id',tournamentController.alltournaments_get);
+router.get('/all-user-tournaments/:id', tournamentController.alltournaments_get);
 
-
+// Configuration sécurisée du stockage multer
 const mystorage = multer.diskStorage({
-  destination: 'uploads/tournament', //'uploads/tournaments'
-  filename: (req, file, redirect) => {
-    //nom unique  par le temp
-    let date = Date.now();
-    // image/png
-    let f1 = date + '.' + file.mimetype.split('/')[1];
-    redirect(null, f1);
+  destination: 'uploads/tournament',
 
-    req.body.photo = f1
+  filename: (req, file, callback) => {
+    // Générer un timestamp unique
+    const timestamp = Date.now();
+
+    // Liste blanche des extensions autorisées
+    const allowedExtensions = {
+      'image/jpeg': 'jpg',
+      'image/jpg': 'jpg',
+      'image/png': 'png',
+      'image/gif': 'gif',
+      'image/webp': 'webp'
+    };
+
+    // Obtenir l'extension sécurisée depuis la liste blanche
+    const safeExtension = allowedExtensions[file.mimetype];
+
+    // Rejeter si le type MIME n'est pas dans la liste blanche
+    if (!safeExtension) {
+      return callback(new Error('Type de fichier invalide. Seules les images sont autorisées.'));
+    }
+
+    // Construire le nom de fichier sécurisé
+    const safeFilename = `${timestamp}.${safeExtension}`;
+
+    // Stocker dans req.body pour utilisation ultérieure
+    req.body.photo = safeFilename;
+
+    callback(null, safeFilename);
   }
-})
-//middleware entre l'appel du request et la fonction de creation
-const upload = multer({ storage: mystorage });
-// updating the tournament method
+});
+
+// Configuration de multer avec validation supplémentaire
+const upload = multer({
+  storage: mystorage,
+  limits: {
+    fileSize: 5 * 1024 * 1024 // Limite de 5MB
+  },
+  fileFilter: (req, file, callback) => {
+    // Double vérification du type MIME
+    if (!file.mimetype.startsWith('image/')) {
+      return callback(new Error('Seuls les fichiers image sont autorisés'));
+    }
+    callback(null, true);
+  }
+});
+
+// Updating the tournament method
 router.put('/:id', upload.single('photo'), async (req, res) => {
   try {
     const id = req.params.id;
-    const { title,
+    const {
+      title,
       nbparticipants,
       jeux,
       link,
       date,
       description,
       youtubelink,
-      photo } = req.body;
+      photo
+    } = req.body;
+
     const updated = await Tournament.findById(id);
+
     if (!updated) {
       return res.status(404).json({ message: 'Tournament not found' });
-    } else {
-      if (title) {
-        // updated.title = title;
-        const updatedTour = await Tournament.findByIdAndUpdate({
-          _id:
-            id
-        }, { title: title }, { new: true });
-        console.log("helloTitle")
-      }
-      if (nbparticipants) {
-        // updated.nbparticipants = nbparticipants;
-        const updatedTour = await Tournament.findByIdAndUpdate({
-          _id:
-            id
-        }, { nbparticipants: nbparticipants }, { new: true });
-      }
-      if (jeux) {
-        // updated.jeux = jeux;
-        const updatedTour = await Tournament.findByIdAndUpdate({
-          _id:
-            id
-        }, { jeux: jeux }, { new: true });
-      }
-      if (link) {
-        // updated.link = link;
-        const updatedTour = await Tournament.findByIdAndUpdate({
-          _id:
-            id
-        }, { link: link }, { new: true });
-      }
-      if (description) {
-        // updated.description = description;
-        const updatedTour = await Tournament.findByIdAndUpdate({
-          _id:
-            id
-        }, { description: description }, { new: true });
-      }
-      if (date) {
-        // updated.description = description;
-        const updatedTour = await Tournament.findByIdAndUpdate({
-          _id:
-            id
-        }, { date: date }, { new: true });
-      }
-      if (youtubelink) {
-        const exists = await videoExists.videoExists(youtubelink);
-        if (exists) {
-          // updated.youtubelink = youtubelink;
-          const updatedTour = await Tournament.findByIdAndUpdate({
-            _id: id
-          }, { youtubelink: youtubelink }, { new: true });
-        } else {
-          return res.status(400).json({
-            message: 'The youtube video link is invalid'
-          });
-        }
-      }
-      console.log("hii photo", photo)
-      if (req.body.photo) {
-        // updated.photo = filename1;
-        const updatedTour = await Tournament.findByIdAndUpdate({
-          _id:
-            id
-        }, { photo: photo }, { new: true });
-      }
-      // await updated.save();
-      res.status(200).json({ message: 'Tournament updated successfully' });
     }
-  } catch (err) {
-    res.status(400).send(err);
-  }
-});
-//  creating tournament method
-router.post('/create-tournament', upload.single('photo'), async (req, res) => {
-  try {
-    const data = req.body;
-    const exists = await videoExists.videoExists(data.youtubelink);
-    const { title,
-      nbparticipants,
-      jeux,
-      link,
-      description,
-      youtubelink,
-      date,
-      photo } = req.body;
-    const newtour = await new Tournament;
-    newtour.created_At = new Date();
+
+    // Objet pour stocker les mises à jour
+    const updateData = {};
+
     if (title) {
-      // updated.title = title;
-      newtour.title = title;
-      console.log("helloTitle")
+      updateData.title = title;
     }
+
     if (nbparticipants) {
-      // updated.nbparticipants = nbparticipants;
-      newtour.nbparticipants = nbparticipants;
-      console.log("helloTitle2")
+      updateData.nbparticipants = nbparticipants;
     }
+
     if (jeux) {
-      // updated.jeux = jeux;
-      newtour.jeux = jeux;
-      console.log("helloTitle")
+      updateData.jeux = jeux;
     }
+
     if (link) {
-      // updated.link = link;
-      newtour.link = link;
-      console.log("helloTitle")
+      updateData.link = link;
     }
+
     if (description) {
-      // updated.description = description;
-      newtour.description = description;
-      console.log("helloTitle")
+      updateData.description = description;
     }
+
     if (date) {
-      // updated.description = description;
-      newtour.date = date;
-      console.log("helloTitle")
+      updateData.date = date;
     }
+
     if (youtubelink) {
       const exists = await videoExists.videoExists(youtubelink);
-      console.log("videioo")
       if (exists) {
-        // updated.youtubelink = youtubelink;
-        newtour.youtubelink = youtubelink;
-        console.log("videioo11")
+        updateData.youtubelink = youtubelink;
       } else {
-        console.log('invalid youtube link')
-        return res.status(400).json({ message: 'invalid youtube link' });
+        return res.status(400).json({
+          message: 'The youtube video link is invalid'
+        });
       }
     }
-    console.log(photo)
-    if (req.body.photo) {
-      // updated.photo = filename1;
-      newtour.photo = req.body.photo;
-    }
-    const chat = new Chat({
-      idtournament: newtour._id,
-      // idsender: req.headers['authorization'],
-      // message: 'Welcome to the tournament chat!'
-    });
-    const user = currentUser(req.headers.authorization);
-    console.log("this is the user", user);
 
-    newtour.chat = chat._id;
-    newtour.idcreator = user
-    newtour.save();
-    chat.save();
-    console.log(req.headers['authorization']);
-    //  await query.exec();
-    console.log(user);
-    // newtour.save();
-    res.status(201).json(newtour);
-    const tour = await Tournament.findById(newtour._id).populate('idcreator');
-    console.log(tour);
+    if (req.body.photo) {
+      updateData.photo = req.body.photo;
+    }
+
+    // Une seule mise à jour au lieu de plusieurs
+    await Tournament.findByIdAndUpdate(id, updateData, { new: true });
+
+    res.status(200).json({ message: 'Tournament updated successfully' });
+
   } catch (err) {
-    console.log(err);
+    console.error('Error updating tournament:', err);
     res.status(400).json({ error: err.message });
   }
 });
 
+// Creating tournament method
+router.post('/create-tournament', upload.single('photo'), async (req, res) => {
+  try {
+    const {
+      title,
+      nbparticipants,
+      jeux,
+      link,
+      description,
+      youtubelink,
+      date,
+      photo
+    } = req.body;
+
+    const newtour = new Tournament();
+    newtour.created_At = new Date();
+
+    if (title) {
+      newtour.title = title;
+    }
+
+    if (nbparticipants) {
+      newtour.nbparticipants = nbparticipants;
+    }
+
+    if (jeux) {
+      newtour.jeux = jeux;
+    }
+
+    if (link) {
+      newtour.link = link;
+    }
+
+    if (description) {
+      newtour.description = description;
+    }
+
+    if (date) {
+      newtour.date = date;
+    }
+
+    if (youtubelink) {
+      const exists = await videoExists.videoExists(youtubelink);
+      if (exists) {
+        newtour.youtubelink = youtubelink;
+      } else {
+        return res.status(400).json({ message: 'Invalid youtube link' });
+      }
+    }
+
+    if (req.body.photo) {
+      newtour.photo = req.body.photo;
+    }
+
+    // Créer le chat associé
+    const chat = new Chat({
+      idtournament: newtour._id
+    });
+
+    const user = currentUser(req.headers.authorization);
+
+    newtour.chat = chat._id;
+    newtour.idcreator = user;
+
+    // Sauvegarder les deux documents
+    await newtour.save();
+    await chat.save();
+
+    res.status(201).json(newtour);
+
+    // Récupérer le tournoi avec les données du créateur
+    const tour = await Tournament.findById(newtour._id).populate('idcreator');
+    console.log('Tournament created:', tour);
+
+  } catch (err) {
+    console.error('Error creating tournament:', err);
+    res.status(400).json({ error: err.message });
+  }
+});
 
 module.exports = router;
