@@ -3,8 +3,7 @@
   background-color: #161616 !important;
   height: auto !important;
   width: 100% !important;
-  min-height: calc(235px + (100px * (20 - 1)));
-  margin-top: 10vh;
+  min-height: calc(235px + (100px * (20 - 1)))
 }
 
 
