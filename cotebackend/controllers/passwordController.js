@@ -161,7 +161,7 @@ module.exports.reset_post = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    const secretKey = isUser._id.toString() + 'net ninja secret ';
+    const secretKey = isUser._id.toString() + process.env.JWT_SECRET;
 
     // Vérifier le token
     let isValid;
