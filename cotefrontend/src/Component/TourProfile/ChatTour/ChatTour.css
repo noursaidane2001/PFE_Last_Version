@@ -70,7 +70,6 @@
     padding: 22px;
     max-height: 22rem;
     width: 22rem;
-    max-height: 250px; /* Set your desired height here */
     overflow: auto; 
 }
 

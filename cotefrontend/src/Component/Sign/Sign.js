@@ -1,22 +1,22 @@
-import * as React from 'react';
-import '../Sign/Sign.css'
-import axios from 'axios';
-import Stack from '@mui/material/Stack';
-import MuiAlert from '@mui/material/Alert';
-import IconButton from '@mui/material/IconButton';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import InputLabel from '@mui/material/InputLabel';
-import InputAdornment from '@mui/material/InputAdornment';
-import FormControl from '@mui/material/FormControl';
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { useNavigate, NavLink } from 'react-router-dom';
-import { Grid, CssBaseline, Button } from '@material-ui/core';
-import { useState, useEffect } from 'react';
-import Swal from 'sweetalert2';
-import withScrollToTop from '../withScrollToTop';
-import inscrit from '../img/inscrit.PNG'
-import { SignPost } from '../../Services/UserService';
+import * as React from "react";
+import "../Sign/Sign.css";
+import axios from "axios";
+import Stack from "@mui/material/Stack";
+import MuiAlert from "@mui/material/Alert";
+import IconButton from "@mui/material/IconButton";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import InputLabel from "@mui/material/InputLabel";
+import InputAdornment from "@mui/material/InputAdornment";
+import FormControl from "@mui/material/FormControl";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import { useNavigate, NavLink } from "react-router-dom";
+import { Grid, CssBaseline, Button } from "@material-ui/core";
+import { useState, useEffect } from "react";
+import Swal from "sweetalert2";
+import withScrollToTop from "../withScrollToTop";
+import inscrit from "../img/inscrit.PNG";
+import { SignPost } from "../../Services/UserService";
 
 function Sign() {
   /*****alert mui*****/
@@ -110,58 +110,58 @@ function Sign() {
       SignPost(post)
         .then((response) => {
           if (response.errors) {
-            if (response.errors.email === "You are already registred login to your account") {
+            if (
+              response.errors.email ===
+              "You are already registred login to your account"
+            ) {
               console.log("echec user exist deja");
               Swal.fire({
                 title: "User email already registred ",
                 icon: "error",
                 confirmButtonText: "Signup again",
-                showCancelButton: false
+                showCancelButton: false,
               });
             }
-          }
-          else {
+          } else {
             console.log("reussit");
             Swal.fire({
               title: "Check your email to confirm account ",
               icon: "success",
               // confirmButtonText: "Go login",
-              showCancelButton: false
+              showCancelButton: false,
             });
           }
-        }
-        )
+        })
         .catch((error) => {
-          console.log("SignPost does not work")
-
+          console.log("SignPost does not work");
         });
     }
   }, [formErrors]);
 
-
   return (
-    <div className='SignForm'>
-      <div className='imgsign'>
+    <div className="SignForm">
+      <div className="imgsign">
         <img src={inscrit} alt="login Image" />
-        <div className="join"><br /> Join us!</div>
+        <div className="join">
+          <br /> Join us!
+        </div>
       </div>
 
-      <div className='FormS'>
-        <div className='SAL'>
-          <div className='Su'>Sign Up</div>
-          <div className='AL' >
-            <div className='A'>Already member ?</div>
-            <NavLink to="/user/login" className='LS'>
+      <div className="FormS">
+        <div className="SAL">
+          <div className="Su">Sign Up</div>
+          <div className="AL">
+            <div className="A">Already member ?</div>
+            <NavLink to="/user/login" className="LS">
               login
             </NavLink>
           </div>
         </div>
 
         {/*****************formulaire****************/}
-        <div className='sForm'>
-          <FormControl required sx={{ m: 1, width: '52ch' }} variant="outlined">
-            <InputLabel htmlFor="name"
-            >First Name</InputLabel>
+        <div className="sForm">
+          <FormControl required sx={{ m: 1, width: "52ch" }} variant="outlined">
+            <InputLabel htmlFor="name">First Name</InputLabel>
             <OutlinedInput
               name="firstname"
               onChange={handleChange}
@@ -169,22 +169,24 @@ function Sign() {
               id="firstname"
               label="First Name"
               sx={{
-                '& fieldset': {
-                  borderColor: '#FFFFFF80',
-
+                "& fieldset": {
+                  borderColor: "#FFFFFF80",
                 },
               }}
-              style={{ color: '#ffffff' }}
-
+              style={{ color: "#ffffff" }}
             />
-            <Stack >
+            <Stack>
               {formErrors.firstname && (
                 <Alert severity="error">{formErrors.firstname}</Alert>
               )}
             </Stack>
           </FormControl>
 
-          <FormControl required sx={{ m: 1, width: '28rem' }} variant="outlined">
+          <FormControl
+            required
+            sx={{ m: 1, width: "28rem" }}
+            variant="outlined"
+          >
             <InputLabel htmlFor="lastname">Last Name</InputLabel>
             <OutlinedInput
               name="lastname"
@@ -193,23 +195,25 @@ function Sign() {
               id="lastname"
               label="Last Name"
               sx={{
-                '& fieldset': {
-                  borderColor: '#FFFFFF80',
+                "& fieldset": {
+                  borderColor: "#FFFFFF80",
                 },
               }}
-              style={{ color: '#ffffff' }}
+              style={{ color: "#ffffff" }}
             />
             <Stack>
               {formErrors.lastname && (
                 <Alert severity="error">{formErrors.lastname}</Alert>
               )}
             </Stack>
-
-
           </FormControl>
           {/* </div> */}
-          <FormControl required sx={{ m: 1, width: '28rem' }} variant="outlined">
-            <InputLabel htmlFor="email" >Email</InputLabel>
+          <FormControl
+            required
+            sx={{ m: 1, width: "28rem" }}
+            variant="outlined"
+          >
+            <InputLabel htmlFor="email">Email</InputLabel>
             <OutlinedInput
               name="email"
               onChange={handleChange}
@@ -217,21 +221,24 @@ function Sign() {
               id="email"
               label="Email"
               sx={{
-                '& fieldset': {
-                  borderColor: '#FFFFFF80',
+                "& fieldset": {
+                  borderColor: "#FFFFFF80",
                 },
               }}
-              style={{ color: '#ffffff' }}
+              style={{ color: "#ffffff" }}
             />
-            <Stack >
+            <Stack>
               {formErrors.email && (
                 <Alert severity="error">{formErrors.email}</Alert>
               )}
             </Stack>
-
           </FormControl>
 
-          <FormControl required sx={{ m: 1, width: '28rem' }} variant="outlined">
+          <FormControl
+            required
+            sx={{ m: 1, width: "28rem" }}
+            variant="outlined"
+          >
             <InputLabel htmlFor="password">Password</InputLabel>
             <OutlinedInput
               name="password"
@@ -240,13 +247,12 @@ function Sign() {
               id="password"
               label="Password"
               sx={{
-                '& fieldset': {
-                  borderColor: '#FFFFFF80',
+                "& fieldset": {
+                  borderColor: "#FFFFFF80",
                 },
               }}
-              style={{ color: '#ffffff' }}
-
-              type={showPassword ? 'text' : 'password'}
+              style={{ color: "#ffffff" }}
+              type={showPassword ? "text" : "password"}
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton
@@ -266,10 +272,9 @@ function Sign() {
                 <Alert severity="error">{formErrors.password}</Alert>
               )}
             </Stack>
-
           </FormControl>
 
-          <FormControl required sx={{ m: 1, width: '52ch' }} variant="outlined">
+          <FormControl required sx={{ m: 1, width: "52ch" }} variant="outlined">
             <InputLabel htmlFor="confirmpassword">Confirm Password</InputLabel>
             <OutlinedInput
               name="confirmpassword"
@@ -278,13 +283,12 @@ function Sign() {
               id="confirmpassword"
               label="Confirm Password"
               sx={{
-                '& fieldset': {
-                  borderColor: '#FFFFFF80',
+                "& fieldset": {
+                  borderColor: "#FFFFFF80",
                 },
               }}
-              style={{ color: '#ffffff' }}
-
-              type={showPassword ? 'text' : 'password'}
+              style={{ color: "#ffffff" }}
+              type={showPassword ? "text" : "password"}
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton
@@ -304,21 +308,20 @@ function Sign() {
                 <Alert severity="error">{formErrors.confirmpassword}</Alert>
               )}
             </Stack>
-
           </FormControl>
-          <div onClick={handleclick} >
-            <Button disabled={isValid() ? false : true}
-              className='btnSign'
-              name='button' type='submit'
-              onClick={handleclick}
-            >
-              Sign up
-            </Button>
-          </div>
+
+          <Button
+            disabled={isValid() ? false : true}
+            className="btnSign"
+            name="button"
+            type="submit"
+            onClick={handleclick}
+          >
+            Sign up
+          </Button>
         </div>
       </div>
     </div>
-
   );
 }
 export default withScrollToTop(Sign);

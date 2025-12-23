@@ -4,7 +4,7 @@
     height: auto !important;
     width: 100% !important;
     min-height: calc(200px + (90px * (6 - 1)));
-    margin-top: 10vh;
+   
 }
 
 .userProfile {

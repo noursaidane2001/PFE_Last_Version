@@ -3,14 +3,24 @@ const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
 const { currentUser } = require('../middleware/currentUser');
 
-module.exports.deleteuser = async (req, res) => {
-  try {
-    user = await User.findOneAndDelete()
-    res.status(200).send(user)
-  }
-  catch (err) {
-    res.status(400).send(err)
-  }
+module.exports.deleteuser= async(req, res) => {
+    try{
+        const user = await User.findOneAndDelete()
+        res.status(200).send(user)
+        }
+    catch(err){
+        res.status(400).send(err)
+    }
+   }
+module.exports.deleteuserbyid= async(req, res) => {
+    try{
+        const id =req.params.id;
+        const user = await User.findOneAndDelete({_id:id})
+        res.status(200).send(user)
+        }
+    catch(err){
+        res.status(400).send(err)
+    }
 }
 module.exports.deleteuserbyid = async (req, res) => {
   try {
@@ -49,13 +59,13 @@ module.exports.userbyid = async (req, res) => {
   }
 }
 
-module.exports.getallusers = async (req, res) => {
-  try {
-    users = await User.find()
-    res.status(200).send(users)
-  } catch (err) {
-    res.status(400).send(err)
-  }
+module.exports.getallusers= async(req, res) => {
+    try{
+        const users=await User.find()
+        res.status(200).send(users)
+    }catch(err){
+        res.status(400).send(err)
+    }
 }
 module.exports.blockuserbyid = async (req, res) => {
   try {

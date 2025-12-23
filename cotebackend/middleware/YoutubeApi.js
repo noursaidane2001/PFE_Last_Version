@@ -2,7 +2,7 @@ const { google } = require("googleapis");
 // Set up YouTube API client
 const youtube = google.youtube({
   version: "v3",
-  auth: process.env.AUTH_SECRET,
+  auth: process.env.YOUTUBE_API_KEY,
 });
 
 async function videoExists(videoId) {

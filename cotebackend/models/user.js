@@ -1,106 +1,143 @@
-const mongoose = require('mongoose');
-const { isEmail } = require('validator');
-const bcrypt = require('bcrypt');
-const Schema = mongoose.Schema;
-const Tournament = require('../models/tournament');
-// const fs = require('fs');
-// const path = require('path');
-// const defaultPhoto = Buffer.from(fs.readFileSync(path.join(__dirname, '..', 'photos', 'defaultprofile.jpg')));
-const userSchema = new mongoose.Schema({
-  firstname: {
-    type: String
-  },
-  lastname: {
-    type: String
-  },
-  email: {
-    type: String,
-    required: [true, 'mention your email'],
-    unique: true,
-    lowercase: true,
-    validate: [isEmail, 'invalid email']
-  },
-  password: {
-    type: String,
-    required: [true, 'mention your password'],
-    minlength: [6, 'password length required is 6']
-  },
-  isAdmin: {
-    type: Boolean,
-    default: false // par défaut, un utilisateur n'est pas un administrateur
-  },
-  photo: {
-    type: String,
-    default: 'defaultprofile.jpg'
-  },
-  blocked: {
-    type: Boolean,
-    default: false
-  },
-  verified: {
-    type: Boolean,
-    default: false
-  },
-  bio: {
-    type: String
-  },
-  followers: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
+const mongoose = require("mongoose");
+const { isEmail } = require("validator");
+const bcrypt = require("bcrypt");
+const Tournament = require("../models/tournament");
 
-  }],
-
-  following: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
-  }],
-
-  // tournamentsparticipations:{
-  //   type: [mongoose.Schema.Types.ObjectId],
-  //   ref: "Tournament",
-  //   // unique :true
-  //   unique :true
-
-  // }
-});
-// fire a function after doc saved to db
-userSchema.post('save', function (doc, next) {
-  console.log('new user was created & saved', doc);
-  next();
-});
-// fire a function before doc saved to db
-userSchema.pre('save', async function (next) {
-  const salt = await bcrypt.genSalt();
-  this.password = await bcrypt.hash(this.password, salt)
-  //console.log('user about to be created & saved', this);
-  //ajouter l'email verification ici
-  next();
-});
-//static method to login user
-userSchema.statics.login = async function (email, password) {
-  const user = await this.findOne({ email });
+const userSchema = new mongoose.Schema(
   {
-    if (user) {
-      if (user.verified == true && user.blocked == false) {
-        const auth = await bcrypt.compare(password, user.password)
-        if (auth) {
-          return user;
-        } throw Error('incorrect password');
-      } else {
-        if (user.verified == false) { throw Error("unverified email"); }
-        if (user.blocked == true) { throw Error("blocked email"); }
-      }
-    } else {
-      throw Error('incorrect email');
-    };
+    firstname: {
+      type: String,
+      trim: true,
+    },
+    lastname: {
+      type: String,
+      trim: true,
+    },
+    email: {
+      type: String,
+      required: [true, "Please enter your email"],
+      unique: true,
+      lowercase: true,
+      trim: true,
+      validate: [isEmail, "Please enter a valid email address"],
+    },
+    password: {
+      type: String,
+      required: [true, "Please enter a password"],
+      minlength: [6, "Password must be at least 6 characters long"],
+    },
+    isAdmin: {
+      type: Boolean,
+      default: false,
+    },
+    photo: {
+      type: String,
+      default: "defaultprofile.jpg",
+    },
+    blocked: {
+      type: Boolean,
+      default: false,
+    },
+    verified: {
+      type: Boolean,
+      default: false,
+    },
+    bio: {
+      type: String,
+      trim: true,
+      maxlength: [500, "Bio cannot exceed 500 characters"],
+    },
+    followers: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+    following: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+  },
+  {
+    timestamps: true,
   }
+);
+
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) return next();
+
+  try {
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+    next();
+  } catch (error) {
+    next(error);
+  }
+});
+
+userSchema.post("save", function (doc, next) {
+  console.log("New user was created & saved:", doc._id);
+  next();
+});
+
+userSchema.statics.login = async function (email, password) {
+  if (!email || !password) {
+    throw new Error("Email and password are required");
+  }
+
+  const user = await this.findOne({ email });
+
+  if (!user) {
+    throw new Error("Invalid email or password");
+  }
+
+  if (user.blocked) {
+    throw new Error("Account is blocked. Please contact support.");
+  }
+
+  if (!user.verified) {
+    throw new Error("Please verify your email address before logging in.");
+  }
+
+  const isPasswordValid = await bcrypt.compare(password, user.password);
+
+  if (!isPasswordValid) {
+    throw new Error("Invalid email or password");
+  }
+
+  return user;
 };
-//find user par id
-// userSchema.statics.profile = async function(_id){
-//   const user = await this.find({_id });
 
-// };
+userSchema.methods.comparePassword = async function (candidatePassword) {
+  return await bcrypt.compare(candidatePassword, this.password);
+};
 
-const User = mongoose.model('User', userSchema);
+userSchema.methods.getProfile = function () {
+  return {
+    _id: this._id,
+    firstname: this.firstname,
+    lastname: this.lastname,
+    email: this.email,
+    photo: this.photo,
+    bio: this.bio,
+    followers: this.followers,
+    following: this.following,
+    isAdmin: this.isAdmin,
+    verified: this.verified,
+    createdAt: this.createdAt,
+    updatedAt: this.updatedAt,
+  };
+};
+
+userSchema.virtual("fullname").get(function () {
+  return `${this.firstname || ""} ${this.lastname || ""}`.trim();
+});
+
+userSchema.set("toJSON", { virtuals: true });
+userSchema.set("toObject", { virtuals: true });
+
+const User = mongoose.model("User", userSchema);
 
 module.exports = User;
