@@ -3,25 +3,37 @@ const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
 const { currentUser } = require('../middleware/currentUser');
 
-module.exports.deleteuser= async(req, res) => {
-    try{
-        user = await User.findOneAndDelete()
-        res.status(200).send(user)
-        }
-    catch(err){
-        res.status(400).send(err)
-    }
-   }
-module.exports.deleteuserbyid= async(req, res) => {
-    try{
-        id =req.params.id;
-        user = await User.findOneAndDelete({_id:id})
-        res.status(200).send(user)
-        }
-    catch(err){
-        res.status(400).send(err)
-    }
+module.exports.deleteuser = async (req, res) => {
+  try {
+    user = await User.findOneAndDelete()
+    res.status(200).send(user)
+  }
+  catch (err) {
+    res.status(400).send(err)
+  }
 }
+module.exports.deleteuserbyid = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    // Vérifier que l'ID est un ObjectId valide
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ error: 'Invalid user ID' });
+    }
+
+    // Supprimer l'utilisateur en s'assurant que l'ID est bien un ObjectId
+    const user = await User.findOneAndDelete({ _id: mongoose.Types.ObjectId(id) });
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    res.status(200).json({ message: 'User deleted successfully', user });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
+  }
+};
 module.exports.userbyid = async (req, res) => {
   try {
     const id = req.params.id;
@@ -29,7 +41,7 @@ module.exports.userbyid = async (req, res) => {
     const user = await User.findById(id)
       .populate('followers')
       .populate('following');
-      console.log("hello", user)
+    console.log("hello", user)
     res.json(user);
   } catch (error) {
     console.error('Error fetching user:', error);
@@ -37,32 +49,32 @@ module.exports.userbyid = async (req, res) => {
   }
 }
 
-module.exports.getallusers= async(req, res) => {
-    try{
-        users=await User.find()
-        res.status(200).send(users)
-    }catch(err){
-        res.status(400).send(err)
-    }
+module.exports.getallusers = async (req, res) => {
+  try {
+    users = await User.find()
+    res.status(200).send(users)
+  } catch (err) {
+    res.status(400).send(err)
+  }
 }
-module.exports.blockuserbyid= async(req, res) => {
-    try {
-        id = req.params.id;
-       updated = await User.findByIdAndUpdate({ _id : id }, {blocked : true});
-       const transport = nodemailer.createTransport({
-         service: "gmail",
-         host: "smtp.gmail.com",
-         auth: {
-           user:"nourentrepreneur466@gmail.com",
-           pass: "kfzagrujhgaultwn"
-         },
-       })
-       console.log("user is blockeddd sending");
-       const mailOptions = {
-         from: process.env.EMAIL,
-         to: updated.email,
-         subject: `Account Blocked Due to Security Vulnerabilities `,
-         text: `
+module.exports.blockuserbyid = async (req, res) => {
+  try {
+    id = req.params.id;
+    updated = await User.findByIdAndUpdate({ _id: id }, { blocked: true });
+    const transport = nodemailer.createTransport({
+      service: "gmail",
+      host: "smtp.gmail.com",
+      auth: {
+        user: "nourentrepreneur466@gmail.com",
+        pass: "kfzagrujhgaultwn"
+      },
+    })
+    console.log("user is blockeddd sending");
+    const mailOptions = {
+      from: process.env.EMAIL,
+      to: updated.email,
+      subject: `Account Blocked Due to Security Vulnerabilities `,
+      text: `
          <!doctype html>
          <html lang="en-US">
          <head>
@@ -108,99 +120,99 @@ module.exports.blockuserbyid= async(req, res) => {
             Best regards <br/> </p>
          </body>
          </html>`
-       };
-       transport.sendMail(mailOptions, (error, info) => {
-         if (error) {
-           return res.status(400).json({ message: "Error" });
-         }
-         return res.status(200).json({ message: "Email Sent" });
-       });
-       res.status(200).send(updated);
-     } catch (err) {
-       res.status(400).send(err);
-     }
+    };
+    transport.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        return res.status(400).json({ message: "Error" });
+      }
+      return res.status(200).json({ message: "Email Sent" });
+    });
+    res.status(200).send(updated);
+  } catch (err) {
+    res.status(400).send(err);
+  }
 }
-module.exports.deblockuserbyid= async(req, res) => {
+module.exports.deblockuserbyid = async (req, res) => {
   try {
-      id = req.params.id;
-     updated = await User.findByIdAndUpdate({ _id : id }, {blocked : false});
-     res.status(200).send(updated);
-   } catch (err) {
-     res.status(400).send(err);
-   }
+    id = req.params.id;
+    updated = await User.findByIdAndUpdate({ _id: id }, { blocked: false });
+    res.status(200).send(updated);
+  } catch (err) {
+    res.status(400).send(err);
+  }
 }
-module.exports.edituserbyid= async(req, res) => {
-    try {
-        const id = req.params.id;
-        const newData = req.body;
-        if(newData.password){
-            const salt = await bcrypt.genSalt();
-            newData.password = await bcrypt.hash(newData.password, salt);
-        }
-        const updated = await User.findByIdAndUpdate(id, newData, {new: true});
-        res.status(200).send(updated);
-    } catch (err) {
-        res.status(400).send(err);
+module.exports.edituserbyid = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const newData = req.body;
+    if (newData.password) {
+      const salt = await bcrypt.genSalt();
+      newData.password = await bcrypt.hash(newData.password, salt);
     }
+    const updated = await User.findByIdAndUpdate(id, newData, { new: true });
+    res.status(200).send(updated);
+  } catch (err) {
+    res.status(400).send(err);
+  }
 }
 
 
 
 module.exports.follow = async (req, res) => {
 
-    if (!User.findById(req.params.id))
-      return res.status(400).send("ID unknown");
-    try {
-      // Add to the follower list
-      const user = currentUser(req.headers.authorization);
-      console.log("User ID: ", user);
-      console.log("User to follow ID: ", req.params.id);
-
-      await User.findByIdAndUpdate(
-        user,
-        { $addToSet : { following: req.params.id} },
-        { new: true }
-      ).exec();
-      // Add to the following list
-      await User.findByIdAndUpdate(
-        req.params.id,
-        { $addToSet : { followers: user } },
-        { new: true }
-      ).exec();
-      res.status(200).send("User followed successfully");
-    } catch (err) {
-      res.status(400).send(err);
-    }
-  };
-module.exports.unfollow= async(req, res) => {
-  const user = currentUser(req.headers.authorization);
-    if (!User.findById(req.params.id) )
+  if (!User.findById(req.params.id))
     return res.status(400).send("ID unknown");
-    try {
-          // Add to the follower list
-      console.log("User ID: ", user);
-      console.log("User to unfollow ID: ", req.params.id);
-            await User.findByIdAndUpdate(
-              user,
-              { $pull : { following: req.params.id} },
-              { new: true }
-            ).exec();
-            // Add to the following list
-            await User.findByIdAndUpdate(
-              req.params.id,
-              { $pull : { followers: user } },
-              { new: true }
-            ).exec();
-            res.status(200).send("User unfollowed successfully");
-     } catch (err) {
-       res.status(400).send(err);
-     }
+  try {
+    // Add to the follower list
+    const user = currentUser(req.headers.authorization);
+    console.log("User ID: ", user);
+    console.log("User to follow ID: ", req.params.id);
+
+    await User.findByIdAndUpdate(
+      user,
+      { $addToSet: { following: req.params.id } },
+      { new: true }
+    ).exec();
+    // Add to the following list
+    await User.findByIdAndUpdate(
+      req.params.id,
+      { $addToSet: { followers: user } },
+      { new: true }
+    ).exec();
+    res.status(200).send("User followed successfully");
+  } catch (err) {
+    res.status(400).send(err);
+  }
+};
+module.exports.unfollow = async (req, res) => {
+  const user = currentUser(req.headers.authorization);
+  if (!User.findById(req.params.id))
+    return res.status(400).send("ID unknown");
+  try {
+    // Add to the follower list
+    console.log("User ID: ", user);
+    console.log("User to unfollow ID: ", req.params.id);
+    await User.findByIdAndUpdate(
+      user,
+      { $pull: { following: req.params.id } },
+      { new: true }
+    ).exec();
+    // Add to the following list
+    await User.findByIdAndUpdate(
+      req.params.id,
+      { $pull: { followers: user } },
+      { new: true }
+    ).exec();
+    res.status(200).send("User unfollowed successfully");
+  } catch (err) {
+    res.status(400).send(err);
+  }
 }
 
 module.exports.followers = async (req, res) => {
   try {
-    const user = await User.findById( req.params.id )
-    .populate('followers');
+    const user = await User.findById(req.params.id)
+      .populate('followers');
     // const aa = await user.populate('followers').exec();
     // console.log(aa)
     const followers = user.followers;
@@ -215,9 +227,9 @@ module.exports.followers = async (req, res) => {
 module.exports.following = async (req, res) => {
   try {
     // console.log("hello world")
-    const user = await User.findById( req.params.id )
-    .populate('following');
-  //  const aa = user.populate({path: 'following'}).execPopulate();
+    const user = await User.findById(req.params.id)
+      .populate('following');
+    //  const aa = user.populate({path: 'following'}).execPopulate();
     // console.log(user)
     const following = user.following;
     const count = following.length;
