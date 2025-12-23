@@ -141,11 +141,12 @@ module.exports.signup_post = async (req, res) => {
 const maxAge = 3 * 24 * 60 * 60;
 
 const createToken = (id) => {
-
-  return jwt.sign({ id }, 'net ninja secret ', {
-    expiresIn: maxAge
-  });
-}
+    return jwt.sign(
+      { id },
+      process.env.JWT_SECRET,
+      { expiresIn: process.env.JWT_EXPIRES_IN }
+    );
+  };
 module.exports.login_post = async (req, res) => {
   const { email, password } = req.body;
   try {
