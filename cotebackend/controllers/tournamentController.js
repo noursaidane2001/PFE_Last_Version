@@ -57,7 +57,10 @@ module.exports.tournamentid_get = async (req, res) => {
 module.exports.tournamentid_delete = asyncHandler(async (req, res) => {
   try {
     const id = req.params.id;
-
+    // Valider que c'est un ObjectId valide
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ error: 'Invalid user ID' });
+    }
     // Delete the tournament
     const tour = await Tournament.findOneAndDelete({ _id: id });
     // Delete the chat of the tournament
@@ -138,7 +141,12 @@ module.exports.tournamentid_unparticipate = async (req, res) => {
 };
 module.exports.participatingtournaments_get = async (req, res) => {
   try {
-    iduser = req.params.id;
+    const iduser = req.params.id;
+
+    // Valider que c'est un ObjectId valide
+    if (!mongoose.Types.ObjectId.isValid(iduser)) {
+      return res.status(400).json({ error: 'Invalid user ID' });
+    }
     const tournaments = await Tournament.find({ participantid: iduser });
 
     return res.status(200).send(tournaments);
@@ -148,7 +156,12 @@ module.exports.participatingtournaments_get = async (req, res) => {
 };
 module.exports.createdtournaments_get = async (req, res) => {
   try {
-    iduser = req.params.id;
+    const iduser = req.params.id;
+
+    // Valider que c'est un ObjectId valide
+    if (!mongoose.Types.ObjectId.isValid(iduser)) {
+      return res.status(400).json({ error: 'Invalid user ID' });
+    }
     const tournaments = await Tournament.find({ idcreator: iduser });
 
     return res.status(200).send(tournaments);
@@ -160,6 +173,11 @@ module.exports.createdtournaments_get = async (req, res) => {
 module.exports.alltournaments_get = async (req, res) => {
   try {
     const iduser = req.params.id;
+
+    // Valider que c'est un ObjectId valide
+    if (!mongoose.Types.ObjectId.isValid(iduser)) {
+      return res.status(400).json({ error: 'Invalid user ID' });
+    }
     const participatingTournaments = await Tournament.find({ participantid: iduser });
     const createdTournaments = await Tournament.find({ idcreator: iduser });
 
