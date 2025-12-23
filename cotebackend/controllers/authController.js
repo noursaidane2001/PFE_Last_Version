@@ -70,152 +70,73 @@ module.exports.signupconfirm_get = async (req, res) => {
 
 }
 
-
 module.exports.signup_post = async (req, res) => {
-  const { firstname, lastname, email, password } = req.body;
   try {
-    const user = await User.create({ firstname, lastname, email, password });
-    const secretKey = user._id + 'net ninja secret ';
-    const link = `http://localhost:3000/user/signupconfirm/${user._id}`;
+    const { firstname, lastname, email, password } = req.body;
+
+    if (
+      !firstname ||
+      !lastname ||
+      !email ||
+      !password ||
+      typeof firstname !== "string" ||
+      typeof lastname !== "string" ||
+      typeof password !== "string" ||
+      !validator.isEmail(email)
+    ) {
+      return res.status(400).json({ message: "Invalid input data" });
+    }
+    const hashedPassword = await bcrypt.hash(password, 12);
+
+    const user = await User.create({
+      firstname: firstname.trim(),
+      lastname: lastname.trim(),
+      email: email.toLowerCase(),
+      password: hashedPassword,
+      isVerified: false
+    });
+
+    const link = `${process.env.CLIENT_URL}/user/signupconfirm/${user._id}`;
 
     const transport = nodemailer.createTransport({
       service: "gmail",
-      host: "smtp.gmail.com",
       auth: {
-        user: "eastremtesting17@gmail.com",
-        pass: "dnozzgkbvcvgirjr"
-      },
-    })
+        user: process.env.EMAIL,
+        pass: process.env.EMAIL_PASSWORD
+      }
+    });
+
     const mailOptions = {
       from: process.env.EMAIL,
       to: email,
-      subject: `Sign Up Confirmation `,
-      text: `
-      <!doctype html>
-      <html lang="en-US">
-      <head>
-          <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
-         
-          <meta name="description" content="Confirm Email ">
-          <style type="text/css">
-              a:hover {text-decoration: underline !important;}
-          </style>
-      </head>
-      <body marginheight="0" topmargin="0" marginwidth="0" style="margin: 0px; background-color: #f2f3f8;" leftmargin="0">
-          <!--100% body table-->
-          <table cellspacing="0" border="0" cellpadding="0" width="100%" bgcolor="#f2f3f8"
-              style="@import url(https://fonts.googleapis.com/css?family=Rubik:300,400,500,700|Open+Sans:300,400,600,700); font-family: 'Open Sans', sans-serif;">
-              <tr>
-                  <td>
-                      <table style="background-color: #f2f3f8; max-width:670px;  margin:0 auto;" width="100%" border="0"
-                          align="center" cellpadding="0" cellspacing="0">
-                          
-                          <tr>
-                              <td>
-                                  <table width="95%" border="0" align="center" cellpadding="0" cellspacing="0"
-                                      style="max-width:670px;background:#fff; border-radius:3px; text-align:center;-webkit-box-shadow:0 6px 18px 0 rgba(0,0,0,.06);-moz-box-shadow:0 6px 18px 0 rgba(0,0,0,.06);box-shadow:0 6px 18px 0 rgba(0,0,0,.06);">
-                                      <tr>
-                                          <td style="height:40px;">&nbsp;</td>
-                                      </tr>
-                                      <tr>
-                                          <td style="padding:0 35px;">
-                                              <h1 style="color:#1e1e2d; font-weight:500; margin:0;font-size:32px;font-family:'Rubik',sans-serif;">
-                                              You joined Estream Plateform This is email confirmation
-                                              </h1>
-                                              <span
-                                                  style="display:inline-block; vertical-align:middle; margin:29px 0 26px; border-bottom:1px solid #cecece; width:100px;"></span>
-                                              <p style="color:#455056; font-size:15px;line-height:24px; margin:0;">
-                                                 We are so glad that you became a member with us but to finish your sign up procedure you should confirm your email adress by following the next link 
-                                                 Welcome to our plateform Estream
-                                              </p>
-                                              <a href=${link}
-                                                  style="background:#20e277;text-decoration:none !important; font-weight:500; margin-top:35px; color:#fff;text-transform:uppercase; font-size:14px;padding:10px 24px;display:inline-block;border-radius:50px;">
-                                                  Confirm your email
-                                                  </a>
-                                          </td>
-                                      </tr>
-                                      <tr>
-                                          <td style="height:40px;">&nbsp;</td>
-                                      </tr>
-                                  </table>
-                              </td>
-                         
-                      </table>
-                  </td>
-              </tr>
-          </table>
-          <!--/100% body table-->
-      </body>
-      </html>`, html: `  <!doctype html>
-      <html lang="en-US">
-      <head>
-          <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
-         
-          <meta name="description" content="Confirm Email ">
-          <style type="text/css">
-              a:hover {text-decoration: underline !important;}
-          </style>
-      </head>
-      <body marginheight="0" topmargin="0" marginwidth="0" style="margin: 0px; background-color: #f2f3f8;" leftmargin="0">
-          <!--100% body table-->
-          <table cellspacing="0" border="0" cellpadding="0" width="100%" bgcolor="#f2f3f8"
-              style="@import url(https://fonts.googleapis.com/css?family=Rubik:300,400,500,700|Open+Sans:300,400,600,700); font-family: 'Open Sans', sans-serif;">
-              <tr>
-                  <td>
-                      <table style="background-color: #f2f3f8; max-width:670px;  margin:0 auto;" width="100%" border="0"
-                          align="center" cellpadding="0" cellspacing="0">
-                          
-                          <tr>
-                              <td>
-                                  <table width="95%" border="0" align="center" cellpadding="0" cellspacing="0"
-                                      style="max-width:670px;background:#fff; border-radius:3px; text-align:center;-webkit-box-shadow:0 6px 18px 0 rgba(0,0,0,.06);-moz-box-shadow:0 6px 18px 0 rgba(0,0,0,.06);box-shadow:0 6px 18px 0 rgba(0,0,0,.06);">
-                                      <tr>
-                                          <td style="height:40px;">&nbsp;</td>
-                                      </tr>
-                                      <tr>
-                                          <td style="padding:0 35px;">
-                                              <h1 style="color:#1e1e2d; font-weight:500; margin:0;font-size:32px;font-family:'Rubik',sans-serif;"> You joined Estream Plateform This is email confirmation</h1>
-                                              <span
-                                                  style="display:inline-block; vertical-align:middle; margin:29px 0 26px; border-bottom:1px solid #cecece; width:100px;"></span>
-                                              <p style="color:#455056; font-size:15px;line-height:24px; margin:0;">
-                                                 We are so glad that you became a member with us but to finish your sign up procedure you should confirm your email adress by following the next link 
-                                                 Welcome to our plateform Estream
-                                              </p>
-                                              <a href=${link}
-                                                  style="background:#20e277;text-decoration:none !important; font-weight:500; margin-top:35px; color:#fff;text-transform:uppercase; font-size:14px;padding:10px 24px;display:inline-block;border-radius:50px;">
-                                                  Confirm your email
-                                                  </a>
-                                          </td>
-                                      </tr>
-                                      <tr>
-                                          <td style="height:40px;">&nbsp;</td>
-                                      </tr>
-                                  </table>
-                              </td>
-                         
-                      </table>
-                  </td>
-              </tr>
-          </table>
-          <!--/100% body table-->
-      </body>
-      </html> `
+      subject: "Sign Up Confirmation",
+      html: `
+        <h2>Email confirmation</h2>
+        <p>Welcome to Estream platform.</p>
+        <p>Please confirm your email by clicking the button below:</p>
+        <a href="${link}" style="padding:10px 20px;background:#20e277;color:#fff;border-radius:5px;text-decoration:none;">
+          Confirm your email
+        </a>
+      `
     };
-    transport.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        return res.status(400).json({ message: "Error" });
-      }
-      return res.status(200).json({ message: "Email Sent" });
-    });
+
+    await transport.sendMail(mailOptions);
     const token = createToken(user._id);
-    res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
-    res.status(201).json({ user: user._id });
-  }
-  catch (err) {
+    res.cookie("jwt", token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "strict",
+      maxAge: maxAge * 1000
+    });
+
+    return res.status(201).json({ message: "Signup successful. Check your email." });
+
+  } catch (err) {
     const errors = handleErrors(err);
     return res.status(400).json({ errors });
   }
-}
+};
+
 //create token
 const maxAge = 3 * 24 * 60 * 60;
 
