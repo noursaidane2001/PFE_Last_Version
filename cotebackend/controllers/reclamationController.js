@@ -82,7 +82,7 @@ module.exports.reclamationLive_get = async (req, res) => {
 
 module.exports.reclamation_byid = async (req, res) => {
   try {
-    reclams = await Reclamation.findById({ _id: req.params.id });
+   const reclams = await Reclamation.findById({ _id: req.params.id });
     res.status(200).send(reclams);
   } catch (err) {
     res.status(400).send(err);
@@ -90,30 +90,11 @@ module.exports.reclamation_byid = async (req, res) => {
 };
 module.exports.treatreclamation = async (req, res) => {
   try {
-    id = req.params.id;
-    reclam = await Reclamation.findByIdAndUpdate({ _id: id }, { status: 'treated' }, { new: true });
+   const id = req.params.id;
+   const reclam = await Reclamation.findByIdAndUpdate({ _id: id }, { status: 'treated' }, { new: true });
 
     res.status(200).send(reclam);
   } catch (err) {
     res.status(400).send(err);
   }
 };
-// module.exports.reclamation_deleteall= async (req, res) => {
-//     try{
-//         reclam = await Reclamation.findOneAndDelete()
-//         res.status(200).send(reclam)
-//     }catch(err){
-//         res.status(400).send(err);
-//     }
-// };
-// module.exports.reclamation_deletebyid= async (req, res) => {
-//     try{
-//         console.log("hello");
-//         id =req.params.id;
-//         reclam = await Reclamation.findOneAndDelete({_id:id});
-//         console.log(reclam);
-//         res.status(200).send(reclam);
-//     }catch(err){
-//         res.status(400).send(err);
-//     }
-// };
