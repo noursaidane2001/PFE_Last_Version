@@ -37,7 +37,7 @@ const requireAuth = (req , res , next )=>{
 const token = req.cookies.jwt;
 //check json web token exisits & is verified
    if (token) {
-    jwt.verify(token,'net ninja secret ',(err,decodedToken)=>{
+       jwt.verify(token, process.env.JWT_SECRET,(err,decodedToken)=>{
         if(err){
             console.log(err.message);
             res.redirect('/login');
