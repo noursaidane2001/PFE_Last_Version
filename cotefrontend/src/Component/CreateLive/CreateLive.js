@@ -275,22 +275,20 @@ function CreateLive(props) {
       </FormControl>
 
       {/* button */}
-      <div onClick={handleclick}>
-        <Button
-          name="button"
-          type="submit"
-          onClick={handleclick}
-          style={{
-            backgroundColor: "#343beb",
-            borderRadius: "50px",
-            letterSpacing: "3px",
-            marginTop: "4rem",
-            width: "200px",
-          }}
-        >
-          Create
-        </Button>
-      </div>
+      <Button
+        name="button"
+        type="submit"
+        onClick={handleclick}
+        style={{
+          backgroundColor: "#343beb",
+          borderRadius: "50px",
+          letterSpacing: "3px",
+          marginTop: "4rem",
+          width: "200px",
+        }}
+      >
+        Create
+      </Button>
     </Grid>
   );
 }
