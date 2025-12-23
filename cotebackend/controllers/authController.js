@@ -6,34 +6,32 @@ const { currentUser } = require('../middleware/currentUser');
 // handle errors
 const handleErrors = (err) => {
   console.log(err.message, err.code);
-  let errors = { email: '', password: ''};
+  let errors = { email: '', password: '' };
   //incorrect email
-if(err.message == 'incorrect email'){
-  errors.email = 'email not registred';
-}
+  if (err.message == 'incorrect email') {
+    errors.email = 'email not registred';
+  }
   //email not verified
-  if(err.message == 'unverified email'){
+  if (err.message == 'unverified email') {
     errors.email = 'email not verified';
   }
-    //email blocked
-if(err.message == 'blocked email'){
-  errors.email = 'email blocked';
-}
-  //incorrect password
-if(err.message == 'incorrect password'){
-  errors.password = 'incorrect password';
-}
-  // duplicate email error
-if (err.code === 11000) {
-  errors.email = 'You are already registred login to your account';
-  return (errors);
+  //email blocked
+  if (err.message == 'blocked email') {
+    errors.email = 'email blocked';
   }
-    // validation errors
+  //incorrect password
+  if (err.message == 'incorrect password') {
+    errors.password = 'incorrect password';
+  }
+  // duplicate email error
+  if (err.code === 11000) {
+    errors.email = 'You are already registred login to your account';
+    return (errors);
+  }
+  // validation errors
   if (err.message.includes('user validation failed')) {
-    // console.log(err);
+
     Object.values(err.errors).forEach(({ properties }) => {
-      // console.log(val);
-      // console.log(properties);
       errors[properties.path] = properties.message;
     });
   }
@@ -42,55 +40,49 @@ if (err.code === 11000) {
 
 // controller actions
 module.exports.signup_get = (req, res) => {
- //res.render('signup');
- //retourner la page de signup
-// res.status(201).json({name: user.name, lastname: user.lastname});
+
 }
 module.exports.login_get = (req, res) => {
-  //res.render('login');
-  //retourner la page de login
 }
-module.exports.signupconfirm_post = async(req, res) => {
+module.exports.signupconfirm_post = async (req, res) => {
   const id = req.params.id;
-  // const token = req.params.token;
   const isUser = await User.findById(id);
   try {
-        if (isUser) {
-          const isSuccess = await User.findByIdAndUpdate(isUser._id, {
-            $set: {
-              verified: true
-            }
-          });
-          if (isSuccess) {
-            return res.status(200).json({ message: "User's email is verified with success" });
-          }
+    if (isUser) {
+      const isSuccess = await User.findByIdAndUpdate(isUser._id, {
+        $set: {
+          verified: true
         }
-        else {
-          return res.status(400).json({ message: "Already Confirmed" });
+      });
+      if (isSuccess) {
+        return res.status(200).json({ message: "User's email is verified with success" });
+      }
+    }
+    else {
+      return res.status(400).json({ message: "Already Confirmed" });
+    }
   }
-}
   catch (error) {
     return res.status(400).json({ "message": error.message });
   }
 }
-module.exports.signupconfirm_get= async(req, res) => {
- 
+module.exports.signupconfirm_get = async (req, res) => {
+
 }
 
 
 module.exports.signup_post = async (req, res) => {
-  const {firstname , lastname , email , password } = req.body;
+  const { firstname, lastname, email, password } = req.body;
   try {
-    const user = await User.create({ firstname , lastname ,email , password });
+    const user = await User.create({ firstname, lastname, email, password });
     const secretKey = user._id + 'net ninja secret ';
-    // const tokensign = jwt.sign({ userID: user._id }, secretKey, { expiresIn: "500m" });
     const link = `http://localhost:3000/user/signupconfirm/${user._id}`;
 
     const transport = nodemailer.createTransport({
       service: "gmail",
       host: "smtp.gmail.com",
       auth: {
-        user:"eastremtesting17@gmail.com",
+        user: "eastremtesting17@gmail.com",
         pass: "dnozzgkbvcvgirjr"
       },
     })
@@ -215,46 +207,42 @@ module.exports.signup_post = async (req, res) => {
       }
       return res.status(200).json({ message: "Email Sent" });
     });
-    //, user.isAdmin
-    const token = createToken(user._id );
-    res.cookie('jwt', token , { httpOnly : true , maxAge : maxAge * 1000});
-    res.status(201).json({user: user._id});
+    const token = createToken(user._id);
+    res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
+    res.status(201).json({ user: user._id });
   }
-  catch(err) {
+  catch (err) {
     const errors = handleErrors(err);
     return res.status(400).json({ errors });
   }
 }
 //create token
-const maxAge = 3 * 24 * 60 * 60 ;
-//, isAdmin
-const createToken = (id ) =>{
-  // , isAdmin
-    return jwt.sign({ id } , 'net ninja secret ', {
-      expiresIn: maxAge
-    });
+const maxAge = 3 * 24 * 60 * 60;
+
+const createToken = (id) => {
+
+  return jwt.sign({ id }, 'net ninja secret ', {
+    expiresIn: maxAge
+  });
 }
 module.exports.login_post = async (req, res) => {
-  /*const { email, password } = req.body;
-  console.log(email, password);1
-  res.send('user login');*/
   const { email, password } = req.body;
-  try{
-     const user =await User.login(email , password);
-     const token = createToken(user._id);
+  try {
+    const user = await User.login(email, password);
+    const token = createToken(user._id);
     const idcurrent = currentUser(token);
-     res.cookie('jwt', token , { httpOnly : true , maxAge : maxAge * 1000});
-     res.status(200).json({user , token});
-     console.log(token);
-     console.log(idcurrent);
-     res.locals.currentUser = idcurrent;
-     console.log(res.locals.currentUser);
-  }catch(err){
+    res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
+    res.status(200).json({ user, token });
+    console.log(token);
+    console.log(idcurrent);
+    res.locals.currentUser = idcurrent;
+    console.log(res.locals.currentUser);
+  } catch (err) {
     const errors = handleErrors(err);
-    res.status(400).json({errors});
+    res.status(400).json({ errors });
   }
 }
 module.exports.logout_get = (req, res) => {
-  res.cookie('jwt' , '',{maxAge : 1});
+  res.cookie('jwt', '', { maxAge: 1 });
   res.redirect('/pageacceuil');
 }
