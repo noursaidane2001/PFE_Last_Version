@@ -66,8 +66,7 @@ return (
                                 letterSpacing: "3px",
                                 marginTop: '25vh',
                                 width: "200px",
-                                marginBottom: "1vh",
-                                marginTop: "10px"
+                                marginBottom: "1vh"
                             }}
                         >
                             add Tournement
