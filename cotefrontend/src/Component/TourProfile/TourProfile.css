@@ -397,7 +397,6 @@
 }
 @media screen and (max-width:1000px) {
   .creator {
-    color: white;
     font-size: 2vh;
     color: #343beb;
     text-decoration: none;
