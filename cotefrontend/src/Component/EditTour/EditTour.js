@@ -458,23 +458,22 @@ function EditTour(props) {
       </div>
 
       {/* button */}
-      <div onClick={handleclick}>
-        <Button
-          name="button"
-          type="submit"
-          style={{
-            backgroundColor: "#343beb",
-            borderRadius: "50px",
-            letterSpacing: "3px",
-            marginTop: "25vh",
-            width: "210px",
-            marginBottom: "5vh",
-          }}
-          onClick={handleclick}
-        >
-          Edit Tournament
-        </Button>
-      </div>
+
+      <Button
+        name="button"
+        type="submit"
+        style={{
+          backgroundColor: "#343beb",
+          borderRadius: "50px",
+          letterSpacing: "3px",
+          marginTop: "25vh",
+          width: "210px",
+          marginBottom: "5vh",
+        }}
+        onClick={handleclick}
+      >
+        Edit Tournament
+      </Button>
     </Grid>
   );
 }
