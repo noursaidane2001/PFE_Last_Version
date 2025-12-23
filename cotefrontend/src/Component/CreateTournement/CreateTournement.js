@@ -468,24 +468,21 @@ function CreateTournement(props) {
       </div>
 
       {/* button */}
-      <div onClick={handleclick}>
-        {/* Button - Fixed for accessibility */}
-        <Button
-          name="button"
-          type="submit"
-          onClick={handleclick}
-          style={{
-            backgroundColor: "#343beb",
-            borderRadius: "50px",
-            letterSpacing: "3px",
-            width: "200px",
-            marginTop: "10px",
-            marginBottom: "1vh",
-          }}
-        >
-          add Tournament
-        </Button>
-      </div>
+      <Button
+        name="button"
+        type="submit"
+        onClick={handleclick}
+        style={{
+          backgroundColor: "#343beb",
+          borderRadius: "50px",
+          letterSpacing: "3px",
+          width: "200px",
+          marginTop: "10px",
+          marginBottom: "1vh",
+        }}
+      >
+        add Tournament
+      </Button>
     </Grid>
   );
 }
