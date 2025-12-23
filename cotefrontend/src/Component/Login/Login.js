@@ -19,11 +19,11 @@ import inscrit from "../img/inscrit.PNG";
 import { LoginPost } from "../../Services/UserService";
 
 function Login() {
-  /*****alert mui*****/
+  
   const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
   });
-  /*****alert mui*****/
+
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState(null);
   const [isSubmit, setIsSubmit] = useState(false);
@@ -32,16 +32,15 @@ function Login() {
     email: "",
     password: "",
   });
+
   const validateForm = (values) => {
     const error = {};
     const gmail = /^[^\s+@]+@[^\s@]+\.[^\s@]{2,}$/i;
-
     if (!values.email) {
       error.email = "Email is required";
     } else if (!gmail.test(values.email)) {
       error.email = "Format not valid!";
     }
-
     if (!values.password) {
       error.password = "Password is required";
     }
@@ -49,7 +48,6 @@ function Login() {
   };
 
   const [showPassword, setShowPassword] = React.useState(false);
-
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   const handleMouseDownPassword = (event) => {
@@ -63,14 +61,12 @@ function Login() {
       [name]: value,
     });
   };
+
   const isValid = () => {
-    if (values.email === "") {
-      return false;
-    }
-    return true;
+    return values.email !== "" && values.password !== "";
   };
 
-  const handleclick = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     setFormErrors(validateForm(values));
     setIsSubmit(true);
@@ -133,7 +129,13 @@ function Login() {
           }
         })
         .catch((error) => {
-          console.log("LoginPost does not work");
+          console.log("LoginPost does not work", error);
+          Swal.fire({
+            title: "Login failed",
+            text: "An error occurred during login. Please try again.",
+            icon: "error",
+            confirmButtonText: "OK",
+          });
         });
     }
   }, [formErrors, isSubmit]);
@@ -141,7 +143,7 @@ function Login() {
   return (
     <div className="loginForm">
       <div className="imglogin">
-        <img src={inscrit} alt="login Image" />
+        <img src={inscrit} alt="Login illustration" />
         <div className="wlc">
           <br />
           Welcome Again !
@@ -158,95 +160,93 @@ function Login() {
           </div>
         </div>
         {/*****************formulaire****************/}
-        <div className="EPForm">
-          <FormControl
-            required
-            sx={{ m: 1, width: "28rem" }}
-            variant="outlined"
-          >
-            <InputLabel htmlFor="email">Email</InputLabel>
-            <OutlinedInput
-              name="email"
-              onChange={handleChange}
-              value={values.email}
-              id="email"
-              label="Email"
-              sx={{
-                "& fieldset": {
-                  borderColor: "#FFFFFF80",
-                },
+        <form onSubmit={handleSubmit}>
+          <div className="EPForm">
+            <FormControl
+              required
+              sx={{ m: 1, width: "28rem" }}
+              variant="outlined"
+            >
+              <InputLabel htmlFor="email">Email</InputLabel>
+              <OutlinedInput
+                name="email"
+                onChange={handleChange}
+                value={values.email}
+                id="email"
+                label="Email"
+                sx={{
+                  "& fieldset": {
+                    borderColor: "#FFFFFF80",
+                  },
+                }}
+                style={{ color: "#ffffff" }}
+              />
+              <Stack>
+                {formErrors.email && (
+                  <Alert severity="error">{formErrors.email}</Alert>
+                )}
+              </Stack>
+            </FormControl>
+            <FormControl
+              required
+              sx={{ m: 1, width: "28rem" }}
+              variant="outlined"
+            >
+              <InputLabel htmlFor="password">Password</InputLabel>
+              <OutlinedInput
+                name="password"
+                onChange={handleChange}
+                value={values.password}
+                id="password"
+                label="Password"
+                sx={{
+                  "& fieldset": {
+                    borderColor: "#FFFFFF80",
+                  },
+                }}
+                style={{ color: "#ffffff" }}
+                type={showPassword ? "text" : "password"}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      style={{ color: "rgb(159, 156, 156)" }}
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                      edge="end"
+                    >
+                      {showPassword ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+              />
+              <Stack>
+                {formErrors.password && (
+                  <Alert severity="error">{formErrors.password}</Alert>
+                )}
+              </Stack>
+            </FormControl>
+            <Link
+              style={{
+                textDecoration: "none",
+                color: "#343beb",
+                fontFamily: "'PT Sans', sans-serif",
+                marginLeft: "0.6rem",
               }}
-              style={{ color: "#ffffff" }}
-            />
-            <Stack>
-              {formErrors.email && (
-                <Alert severity="error">{formErrors.email}</Alert>
-              )}
-            </Stack>
-          </FormControl>
-
-          <FormControl
-            required
-            sx={{ m: 1, width: "28rem" }}
-            variant="outlined"
+              to={"/user/forgot-password"}
+            >
+              Forgot Password ?
+            </Link>
+          </div>
+          <Button
+            disabled={!isValid()}
+            className="btnLogin"
+            name="button"
+            type="submit"
           >
-            <InputLabel htmlFor="password">Password</InputLabel>
-            <OutlinedInput
-              name="password"
-              onChange={handleChange}
-              value={values.password}
-              id="password"
-              label="Password"
-              sx={{
-                "& fieldset": {
-                  borderColor: "#FFFFFF80",
-                },
-              }}
-              style={{ color: "#ffffff" }}
-              type={showPassword ? "text" : "password"}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton
-                    style={{ color: "rgb(159, 156, 156)" }}
-                    aria-label="toggle password visibility"
-                    onClick={handleClickShowPassword}
-                    onMouseDown={handleMouseDownPassword}
-                    edge="end"
-                  >
-                    {showPassword ? <Visibility /> : <VisibilityOff />}
-                  </IconButton>
-                </InputAdornment>
-              }
-            />
-            <Stack>
-              {formErrors.password && (
-                <Alert severity="error">{formErrors.password}</Alert>
-              )}
-            </Stack>
-          </FormControl>
-          <Link
-            style={{
-              textDecoration: "none",
-              color: "#343beb",
-              fontFamily: "'PT Sans', sans-serif",
-              marginLeft: "0.6rem",
-            }}
-            to={"/user/forgot-password"}
-          >
-            {" "}
-            Forgot Password ?
-          </Link>
-        </div>
-
-        <Button
-          disabled={isValid() ? false : true}
-          className="btnLogin"
-          name="button"
-          type="submit"
-          onClick={handleclick}
-        >
-          Login
-        </Button>
+            Login
+          </Button>
+        </form>
       </div>
     </div>
   );
