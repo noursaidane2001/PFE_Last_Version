@@ -41,7 +41,7 @@ router.get('/signupconfirm/:id',authController.signupconfirm_get);
  router.get('/followers/:id', userController.followers);
  router.get('/mytournaments/:id', userController.tournaments_participated);
 // Add photo de profile
-filename = '';
+const filename = '';
 
 const mystorage = multer.diskStorage({
   destination: './uploads/user', //'./uploads/user'
@@ -73,32 +73,3 @@ module.exports = router;
 
 
 
-//CRUD user: Modifier ses infos
-//  router.put('/:id', async (req, res) => {
-//    try {
-//      id = req.params.id;
-//      newData = req.body;
-//      updated = await User.findByIdAndUpdate({ _id : id }, newData);
-//    await  updated.save();
-//     res.status(200).send(updated);
-//   } catch (err) {
-//      res.status(400).send(err);
-//    }
-//  });
-
-// const upload = multer({storage: mystorage});
-
-// router.post('/addprofilephoto', upload.single('photo'), async (req, res) => {
-//   try {
-//     const id = req.body.id;
-//     const updatedUser = await User.findByIdAndUpdate(id, {photo: filename}, {new: true});
-//     filename = '';
-//     res.status(201).json(updatedUser);
-//   } catch (err) {
-//     console.log(err);
-//     res.status(400).json({error: err.message});
-//   }
-// });
-
-
-// module.exports= router; 

@@ -5,7 +5,7 @@ const { currentUser } = require('../middleware/currentUser');
 
 module.exports.deleteuser= async(req, res) => {
     try{
-        user = await User.findOneAndDelete()
+        const user = await User.findOneAndDelete()
         res.status(200).send(user)
         }
     catch(err){
@@ -14,7 +14,7 @@ module.exports.deleteuser= async(req, res) => {
    }
 module.exports.deleteuserbyid= async(req, res) => {
     try{
-        id =req.params.id;
+        const id =req.params.id;
         user = await User.findOneAndDelete({_id:id})
         res.status(200).send(user)
         }
@@ -39,7 +39,7 @@ module.exports.userbyid = async (req, res) => {
 
 module.exports.getallusers= async(req, res) => {
     try{
-        users=await User.find()
+        const users=await User.find()
         res.status(200).send(users)
     }catch(err){
         res.status(400).send(err)

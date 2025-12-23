@@ -10,27 +10,21 @@ const Chat = require('../models/chat');
 function handleErrors(err) {
   let errors = { title: 'incorrect title', jeux: 'incorrect name of game', nbparticipants: 'incorrect nbparticipants', date: 'incorrect date', link: 'incorrect link', photo: 'incorrect photo' };
   console.log(err.message, err.code);
-  //incorrect title
   if (err.message == 'incorrect title') {
     errors.title = 'title not registred';
   }
-  //incorrect jeux
   if (err.message == 'incorrect name of game') {
     errors.jeux = 'incorrect name of game';
   }
-  //incorrect nbparticipants
   if (err.message == 'incorrect nbparticipants') {
     errors.nbparticipants = 'incorrect nbparticipants';
   }
-  //incorrect date
   if (err.message == 'incorrect date') {
     errors.date = 'incorrect date';
   }
-  //incorrect link
   if (err.message == 'incorrect link') {
     errors.link = 'incorrect link';
   }
-  //incorrect photo
   if (err.message == 'incorrect photo') {
     errors.photo = 'incorrect photo';
   }
@@ -58,12 +52,8 @@ module.exports.tournamentid_delete = asyncHandler(async (req, res) => {
   try {
     const id = req.params.id;
 
-    // Delete the tournament
     const tour = await Tournament.findOneAndDelete({ _id: id });
-    // Delete the chat of the tournament
-    // const chat = await Chat.findOneAndDelete({ _id: tour.chat });
-
-    // Delete the associated reclamations
+    
     await Reclamation.deleteMany({ idtournament: id });
 
     res.status(200).send(tour);
@@ -97,7 +87,7 @@ module.exports.tournamentid_participate = async (req, res) => {
       const tour = await Tournament.findByIdAndUpdate(
         req.params.id,
         { $addToSet: { participantid: user } },
-        //user._id } },
+       
         { new: true }
       ).populate('participantid').populate('idcreator');
       console.log(tour);
@@ -112,7 +102,6 @@ module.exports.tournamentid_unparticipate = async (req, res) => {
   try {
     console.log('im here')
     const user = currentUser(req.headers.authorization);
-    //  const user = await User.findById(req.body.participantid);
     console.log("i'm the participant", user)
     if (!user) {
       console.log('use not found ')
@@ -126,11 +115,7 @@ module.exports.tournamentid_unparticipate = async (req, res) => {
       { $pull: { participantid: user } },
       { new: true }
     );
-    // await User.findByIdAndUpdate(
-    //   user.id,
-    //   { $pull: { tournamentsparticipations: req.params.id } },
-    //   { new: true }
-    // );
+    
     return res.status(200).send({ message: "The user is no longer participating" });
   } catch (err) {
     return res.status(400).send(err);
@@ -138,7 +123,7 @@ module.exports.tournamentid_unparticipate = async (req, res) => {
 };
 module.exports.participatingtournaments_get = async (req, res) => {
   try {
-    iduser = req.params.id;
+    const iduser = req.params.id;
     const tournaments = await Tournament.find({ participantid: iduser });
 
     return res.status(200).send(tournaments);
@@ -148,7 +133,7 @@ module.exports.participatingtournaments_get = async (req, res) => {
 };
 module.exports.createdtournaments_get = async (req, res) => {
   try {
-    iduser = req.params.id;
+    const iduser = req.params.id;
     const tournaments = await Tournament.find({ idcreator: iduser });
 
     return res.status(200).send(tournaments);
@@ -156,7 +141,6 @@ module.exports.createdtournaments_get = async (req, res) => {
     return res.status(400).send(err);
   }
 };
-//get all user  tournaments 
 module.exports.alltournaments_get = async (req, res) => {
   try {
     const iduser = req.params.id;
